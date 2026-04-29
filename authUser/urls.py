@@ -5,4 +5,5 @@ app_name = 'authUser' # Namespace untuk mempermudah routing
 
 urlpatterns = [
     path('login/', views.login_register_view, name='login'),
+    path('dashboard/', views.dashboard_view, name='dashboard'),
 ]

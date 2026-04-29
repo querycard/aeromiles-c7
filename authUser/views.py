@@ -64,7 +64,7 @@ def login_register_view(request):
                 row = cursor.fetchone()
 
             
-            if row and check_password(raw_password, row[0]):
+            if row and (raw_password == row[0] or check_password(raw_password, row[0])):
                 request.session['email'] = email
                 
                 with connection.cursor() as cursor:
@@ -83,3 +83,47 @@ def login_register_view(request):
             return redirect('authUser:login')
 
     return render(request, 'login_register.html')
+
+def dashboard_view(request):
+    email = request.session.get('email')
+    role = request.session.get('role')
+    
+    if not email:
+        return redirect('authUser:login')
+
+    data = {}
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            SELECT salutation, first_mid_name, last_name, email, country_code, mobile_number, kewarganegaraan, tanggal_lahir 
+            FROM aeromiles.PENGGUNA WHERE email = %s
+        """, [email])
+        user_row = cursor.fetchone()
+        
+        if user_row:
+            data = {
+                'nama_lengkap': f"{user_row[0]} {user_row[1]} {user_row[2]}",
+                'email': user_row[3],
+                'telepon': f"{user_row[4]} {user_row[5]}",
+                'kewarganegaraan': user_row[6],
+                'tanggal_lahir': user_row[7],
+                'role': role
+            }
+
+        if role == 'Member':
+            cursor.execute("""
+                SELECT nomor_member, id_tier, total_miles, award_miles, tanggal_bergabung 
+                FROM aeromiles.MEMBER WHERE email = %s
+            """, [email])
+            m_row = cursor.fetchone()
+            if m_row:
+                data.update({
+                    'nomor_member': m_row[0], 'tier': m_row[1], 
+                    'total_miles': m_row[2], 'award_miles': m_row[3], 'tanggal_bergabung': m_row[4]
+                })
+        elif role == 'Staf':
+            cursor.execute("SELECT id_staf, kode_maskapai FROM aeromiles.STAF WHERE email = %s", [email])
+            s_row = cursor.fetchone()
+            if s_row:
+                data.update({'id_staf': s_row[0], 'kode_maskapai': s_row[1]})
+
+    return render(request, 'dashboard.html', {'data': data})
