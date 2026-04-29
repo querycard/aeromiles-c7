@@ -21,5 +21,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/', include('authUser.urls')),
     path('biru/', include('biru.urls')),
-    
+    path('merah/ ', include('merah.urls')),
 ]
