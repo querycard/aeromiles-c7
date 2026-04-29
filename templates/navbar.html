@@ -1,0 +1,142 @@
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+  
+  .aero-navbar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    background: #001f4d;
+    font-family: 'Poppins', sans-serif;
+    z-index: 9999;
+    box-shadow: 0 4px 20px rgba(0,0,0,.3);
+  }
+  
+  .aero-top {
+    display: flex;
+    align-items: center;
+    height: 58px;
+    padding: 0 30px;
+  }
+  
+  .aero-brand {
+    color: #4db8ff;
+    font-weight: 700;
+    font-size: 17px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .aero-menu {
+    display: flex;
+    margin-left: 20px;
+    gap: 4px;
+  }
+  
+  .aero-link {
+    color: rgba(255,255,255,.7);
+    text-decoration: none;
+    font-size: 13px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    transition: .2s;
+  }
+  
+  .aero-link:hover {
+    background: rgba(255,255,255,.1);
+    color: white;
+  }
+  
+  .aero-user {
+    margin-left: auto;
+    text-align: right;
+    color: white;
+    font-size: 12px;
+  }
+  
+  .aero-logout {
+    margin-left: 12px;
+    border: 1px solid rgba(255,80,80,.4);
+    color: #ff6b6b;
+    background: none;
+    padding: 5px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  
+  .aero-sub {
+    background: #001533;
+    font-size: 11px;
+    padding: 6px 30px;
+    color: rgba(255,255,255,.5);
+  }
+  
+  /* Tambahan margin atas untuk body supaya konten tidak tertutup fixed navbar */
+  body {
+      padding-top: 90px; 
+  }
+  </style>
+  
+  
+  <div class="aero-navbar">
+    <div class="aero-top">
+  
+      <a href="#" class="aero-brand">
+        ✈️ AeroMiles
+      </a>
+  
+      <!-- Menu (kiri) -->
+      <div class="aero-menu">
+        <!-- MENGGUNAKAN SESSION RAW SQL -->
+        {% if request.session.role %}
+          
+          <a href="{% url 'authUser:dashboard' %}" class="aero-link">Dashboard</a>
+          
+          {% if request.session.role == 'Member' %}
+            <a href="#" class="aero-link">Identitas</a>
+            <a href="{% url 'hijau:claim_miles' %}" class="aero-link">Klaim</a>
+            <a href="{% url 'hijau:transfer_miles' %}" class="aero-link">Transfer</a>
+            <a href="{% url 'biru:redeem' %}" class="aero-link">Redeem</a>
+            <a href="{% url 'biru:beli_package' %}" class="aero-link">Beli Package</a>
+            <a href="{% url 'biru:info_tier' %}" class="aero-link">Info Tier</a>
+  
+          {% elif request.session.role == 'Staf' %}
+            <a href="#" class="aero-link">Kelola Member</a>
+            <a href="{% url 'hijau:staff_claim_approval' %}" class="aero-link">Kelola Klaim</a>
+            <a href="{% url 'merah:kelola_hadiah' %}" class="aero-link">Kelola Hadiah</a>
+            <a href="{% url 'merah:kelola_mitra' %}" class="aero-link">Kelola Mitra</a>
+            <a href="{% url 'biru:laporan' %}" class="aero-link">Laporan</a>
+          {% endif %}
+  
+          <a href="{% url 'authUser:profile' %}" class="aero-link">Pengaturan Profil</a>
+  
+        {% endif %}
+      </div>
+  
+      <!-- KANAN -->
+      {% if not request.session.role %}
+        <div style="margin-left:auto;">
+          <a href="{% url 'authUser:login' %}" class="aero-link">Login</a>
+        </div>
+  
+      {% else %}
+        <div class="aero-user">
+          <!-- Karena kita belum menyimpan nama di session, kita pakai email -->
+          {{ request.session.email }} ({{ request.session.role }})
+  
+          <!-- Form logout harus diarahkan ke url yang benar -->
+          <form action="{% url 'authUser:logout' %}" method="POST" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" class="aero-logout">Logout</button>
+          </form>
+        </div>
+      {% endif %}
+  
+    </div>
+  
+    {% if request.session.role %}
+    <div class="aero-sub">
+      Masuk sebagai {{ request.session.email }}
+    </div>
+    {% endif %}
+  </div>

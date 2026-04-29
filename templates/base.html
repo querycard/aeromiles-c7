@@ -3,73 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AeroMiles - {% block title %}Halaman{% endblock %}</title>
+    <title>AeroMiles</title>
+
+    <!-- Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
     <style>
-        body { font-family: Arial, sans-serif; background-color: #f4f7f6; margin: 0; padding: 0; }
-        .navbar { background-color: #0056b3; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; color: white; }
-        .navbar a { color: white; text-decoration: none; margin-right: 15px; font-weight: bold; font-size: 14px; }
-        .navbar a:hover { text-decoration: underline; }
-        .nav-links { display: flex; align-items: center; }
-        .logout-btn { background-color: #dc3545; padding: 8px 12px; border-radius: 4px; border: none; color: white; cursor: pointer; font-weight: bold; }
-        .logout-btn:hover { background-color: #c82333; }
-        .container { max-width: 800px; margin: 30px auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-        .alert { padding: 10px; margin-bottom: 20px; border-radius: 4px; text-align: center; }
-        .alert-success { background-color: #d4edda; color: #155724; }
-        .alert-error { background-color: #f8d7da; color: #721c24; }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; font-weight: bold; margin-bottom: 5px; }
-        input, select { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-        input[readonly] { background-color: #e9ecef; cursor: not-allowed; }
-        .btn-primary { background-color: #0056b3; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; }
-        .btn-primary:hover { background-color: #004494; }
+        :root {
+            --bg: #f0f4f9;
+            --text: #0a1f44;
+            --navbar-h: 58px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        /* Biar konten ga ketiban navbar fixed */
+        .page-wrapper {
+            padding-top: calc(var(--navbar-h) + 35px);
+            min-height: 100vh;
+        }
+
+        main {
+            padding: 20px 30px;
+        }
     </style>
 </head>
+
 <body>
 
-    <div class="navbar">
-        <div class="logo"><strong>✈️ AeroMiles</strong></div>
-        <div class="nav-links">
-            {% if request.session.role %}
-                <a href="{% url 'authUser:dashboard' %}">Dashboard</a>
-                
-                {% if request.session.role == 'Member' %}
-                    <a href="#">Identitas Saya</a>
-                    <a href="{% url 'hijau:claim_miles' %}">Klaim Miles</a>
-                    <a href="{% url 'hijau:transfer_miles' %}">Transfer Miles</a>
-                    <a href="{% url 'biru:redeem' %}">Redeem Hadiah</a>
-                    <a href="{% url 'biru:beli_package' %}">Beli Package</a>
-                    <a href="{% url 'biru:info_tier' %}">Info Tier</a>
-                {% elif request.session.role == 'Staf' %}
-                    <a href="#">Kelola Member</a>
-                    <a href="{% url 'hijau:staff_claim_approval' %}">Kelola Klaim</a>
-                    <a href="{% url 'merah:kelola_hadiah' %}">Kelola Hadiah & Penyedia</a>
-                    <a href="{% url 'merah:kelola_mitra' %}">Kelola Mitra</a>
-                    <a href="{% url 'biru:laporan' %}">Laporan Transaksi</a>
-                {% endif %}
-                
-                <a href="{% url 'authUser:profile' %}">Pengaturan Profil</a>
-                
-                <form action="{% url 'authUser:logout' %}" method="POST" style="display:inline;">
-                    {% csrf_token %}
-                    <button type="submit" class="logout-btn">Logout</button>
-                </form>
-            {% else %}
-                <a href="{% url 'authUser:login' %}">Login / Register</a>
-            {% endif %}
-        </div>
-    </div>
+    {% include 'navbar.html' %}
 
-    <div class="container">
-        {% if messages %}
-            {% for message in messages %}
-                <div class="alert {% if message.tags == 'error' %}alert-error{% else %}alert-success{% endif %}">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        {% endif %}
-
-        {% block content %}
-        {% endblock %}
+    <div class="page-wrapper">
+        <main>
+            {% block content %}
+            {% endblock %}
+        </main>
     </div>
 
 </body>
