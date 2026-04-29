@@ -2,7 +2,7 @@
   @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
   
   body {
-      padding-top: 90px; /* Biar konten gak ketutup navbar fixed */
+      padding-top: 90px;
   }
   
   .aero-navbar {
@@ -17,9 +17,9 @@
   .aero-top {
     display: flex;
     align-items: center;
-    min-height: 58px; /* FIX: Diganti dari height jadi min-height agar bisa membesar kalau menu turun baris */
+    min-height: 58px;
     padding: 10px 30px;
-    flex-wrap: wrap; /* FIX: Elemen akan turun ke bawah dengan rapi kalau layar sempit */
+    flex-wrap: wrap;
     gap: 10px;
   }
   
@@ -38,8 +38,7 @@
     display: flex;
     margin-left: 20px;
     gap: 4px;
-    flex-wrap: wrap; /* FIX: Menu akan turun baris dengan rapi */
-  }
+    flex-wrap: wrap;
   
   .aero-link {
     color: rgba(255,255,255,.7);
@@ -48,7 +47,7 @@
     padding: 6px 12px;
     border-radius: 6px;
     transition: .2s;
-    white-space: nowrap; /* FIX PENTING: Mencegah kata seperti "Kelola Member" pecah jadi 2 baris */
+    white-space: nowrap;
   }
   
   .aero-link:hover {
