@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transfer Miles - AeroMiles</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 font-sans">
+
+    <!-- Header / Navbar Mockup -->
+    <nav class="bg-[#002554] text-white p-4 text-sm">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-8">
+                <span class="font-bold text-lg">✈ AeroMiles</span>
+                <div class="flex gap-4 opacity-80">
+                    <span>Dashboard</span>
+                    <span>Identitas Saya</span>
+                    <span class="border-b-2 border-white">Transfer Miles</span>
+                </div>
+            </div>
+            <div class="flex gap-4">
+                <span>Masuk sebagai <b>Mr. John Doe</b></span>
+                <span class="text-red-400 cursor-pointer">Logout</span>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-5xl mx-auto mt-10 p-4">
+        <!-- Title Section -->
+        <div class="flex justify-between items-start mb-6">
+            <div>
+                <h1 class="text-2xl font-bold text-gray-800">Transfer Miles</h1>
+                <p class="text-gray-500">Award Miles tersedia: <span class="font-bold text-black">32,000</span></p>
+            </div>
+            <button onclick="openModal()" class="bg-[#1e3a8a] text-white px-5 py-2 rounded-lg flex items-center gap-2 hover:bg-blue-900 transition">
+                <span class="text-xl">+</span> Transfer Baru
+            </button>
+        </div>
+
+        <!-- Table Card -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100">
+            <div class="p-5 border-b border-gray-100">
+                <h2 class="font-bold text-gray-700">Riwayat Transfer</h2>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead>
+                        <tr class="text-gray-400 text-sm border-b border-gray-100">
+                            <th class="p-5 font-medium">Waktu</th>
+                            <th class="p-5 font-medium">Member</th>
+                            <th class="p-5 font-medium">Jumlah Miles</th>
+                            <th class="p-5 font-medium">Catatan</th>
+                            <th class="p-5 font-medium">Tipe</th>
+                            <th class="p-5 font-medium text-center">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-sm text-gray-700">
+                        <!-- Row 1 -->
+                        <tr class="border-b border-gray-50 hover:bg-gray-50">
+                            <td class="p-5">2025-01-15 10:30</td>
+                            <td class="p-5">
+                                <p class="font-bold">Jane Smith</p>
+                                <p class="text-gray-400 text-xs">jane@example.com</p>
+                            </td>
+                            <td class="p-5 text-red-500 font-bold">-5,000</td>
+                            <td class="p-5">Hadiah ulang tahun</td>
+                            <td class="p-5"><span class="bg-gray-100 px-3 py-1 rounded-full text-xs">Kirim</span></td>
+                            <td class="p-5 text-center text-gray-400">🔒</td>
+                        </tr>
+                        <!-- Row 2 -->
+                        <tr class="hover:bg-gray-50">
+                            <td class="p-5">2025-02-01 14:00</td>
+                            <td class="p-5">
+                                <p class="font-bold">Budi A. Santoso</p>
+                                <p class="text-gray-400 text-xs">budi@example.com</p>
+                            </td>
+                            <td class="p-5 text-green-600 font-bold">+2,000</td>
+                            <td class="p-5">-</td>
+                            <td class="p-5"><span class="bg-[#1e3a8a] text-white px-3 py-1 rounded-full text-xs">Terima</span></td>
+                            <td class="p-5 text-center text-gray-400">🔒</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- MODAL (Sesuai Screenshot 2026-04-29 at 19.18.00.png) -->
+    <div id="modalTransfer" class="fixed inset-0 bg-black/50 flex items-center justify-center hidden">
+        <div class="bg-white w-[400px] rounded-lg shadow-xl overflow-hidden">
+            <div class="flex justify-between items-center p-4 border-b">
+                <h3 class="font-bold">Transfer Miles</h3>
+                <button onclick="closeModal()" class="text-gray-400 hover:text-black">✕</button>
+            </div>
+            <div class="p-5 space-y-4">
+                <div>
+                    <label class="block text-sm font-semibold mb-1">Email Penerima</label>
+                    <input type="text" placeholder="johnlennon@gmail.com" class="w-full border rounded-md p-2 text-sm focus:ring-1 focus:ring-blue-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold mb-1">Jumlah Miles</label>
+                    <input type="number" value="20000" class="w-full border rounded-md p-2 text-sm focus:ring-1 focus:ring-blue-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold mb-1">Catatan (opsional)</label>
+                    <textarea class="w-full border rounded-md p-2 text-sm h-20 focus:ring-1 focus:ring-blue-500 outline-none">Hadiah</textarea>
+                </div>
+                <button class="w-full bg-[#1e3a8a] text-white py-2 rounded-md font-semibold hover:bg-blue-900 transition">Transfer</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openModal() {
+            document.getElementById('modalTransfer').classList.remove('hidden');
+        }
+        function closeModal() {
+            document.getElementById('modalTransfer').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>

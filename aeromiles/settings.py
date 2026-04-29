@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'authUser',
     'biru',
     'merah',
+    'hijau',
 ]
 
 MIDDLEWARE = [
