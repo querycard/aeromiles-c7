@@ -1,0 +1,56 @@
+{% block title %}Informasi Tier{% endblock %}
+
+{% block content %}
+<h2>Informasi Tier AeroMiles</h2>
+
+<!-- BANNER STATUS TIER -->
+<div style="background-color: #d4edda; border: 1px solid #c3e6cb; padding: 20px; border-radius: 6px; margin-bottom: 20px;">
+    <h3 style="color: #155724; margin-top: 0;">Status Anda: Silver (T002)</h3>
+    <p>Miles dibutuhkan untuk naik ke <strong>Gold</strong>: <strong>4,000 Tier Miles</strong> lagi!</p>
+</div>
+
+<!-- DAFTAR SELURUH TIER -->
+<table border="1" cellpadding="10" cellspacing="0" style="width: 100%; border-collapse: collapse; text-align: center;">
+    <thead style="background-color: #343a40; color: white;">
+        <tr>
+            <th>ID Tier</th>
+            <th>Nama Tier</th>
+            <th>Min. Frekuensi Terbang</th>
+            <th>Min. Tier Miles</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>T001</td>
+            <td>Basic</td>
+            <td>0</td>
+            <td>0</td>
+        </tr>
+        <!-- Highlight tier saat ini -->
+        <tr style="background-color: #ffeeba; font-weight: bold;">
+            <td>T002</td>
+            <td>Silver (Saat Ini)</td>
+            <td>5</td>
+            <td>1,000</td>
+        </tr>
+        <tr>
+            <td>T003</td>
+            <td>Gold</td>
+            <td>10</td>
+            <td>5,000</td>
+        </tr>
+        <tr>
+            <td>T004</td>
+            <td>Platinum</td>
+            <td>20</td>
+            <td>10,000</td>
+        </tr>
+        <tr>
+            <td>T005</td>
+            <td>Diamond</td>
+            <td>35</td>
+            <td>20,000</td>
+        </tr>
+    </tbody>
+</table>
+{% endblock %}

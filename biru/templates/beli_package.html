@@ -1,0 +1,32 @@
+{% block title %}Beli Package Miles{% endblock %}
+
+{% block content %}
+<h2>Pembelian Award Package Miles</h2>
+<p>Beli paket miles tambahan untuk akun Anda.</p>
+
+<div style="display: flex; gap: 20px; flex-wrap: wrap;">
+    <!-- Simulasi Card Paket -->
+    <div style="border: 1px solid #ccc; padding: 20px; border-radius: 8px; width: 30%; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+        <h3 style="color: #0056b3;">AMP-001</h3>
+        <h2>1,000 Miles</h2>
+        <p style="font-size: 20px; font-weight: bold; color: #28a745;">Rp 100,000</p>
+        <button class="btn-primary" style="width: 100%;" onclick="confirmBuy('AMP-001', 1000, 'Rp 100,000')">Beli Paket</button>
+    </div>
+
+    <div style="border: 1px solid #ccc; padding: 20px; border-radius: 8px; width: 30%; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+        <h3 style="color: #0056b3;">AMP-002</h3>
+        <h2>2,500 Miles</h2>
+        <p style="font-size: 20px; font-weight: bold; color: #28a745;">Rp 200,000</p>
+        <button class="btn-primary" style="width: 100%;" onclick="confirmBuy('AMP-002', 2500, 'Rp 200,000')">Beli Paket</button>
+    </div>
+</div>
+
+<script>
+    function confirmBuy(id, miles, harga) {
+        const konfirmasi = confirm(`Konfirmasi Pembelian:\nID Paket: ${id}\nJumlah: ${miles} Miles\nTotal Harga: ${harga}\n\nLanjutkan pembayaran?`);
+        if (konfirmasi) {
+            alert("Pembelian Berhasil! Award miles telah ditambahkan ke akun Anda.");
+        }
+    }
+</script>
+{% endblock %}

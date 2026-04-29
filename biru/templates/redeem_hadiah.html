@@ -1,0 +1,87 @@
+{% block title %}Redeem Hadiah{% endblock %}
+
+{% block content %}
+<h2>Redeem Hadiah</h2>
+
+<!-- KATALOG HADIAH -->
+<div style="background-color: #f8f9fa; padding: 15px; border-radius: 6px; margin-bottom: 20px;">
+    <h3>Katalog Hadiah Tersedia</h3>
+    <p><em>Award Miles Anda saat ini: <strong>8,500 Miles</strong> (Simulasi)</em></p>
+    
+    <table border="1" cellpadding="10" cellspacing="0" style="width: 100%; border-collapse: collapse; text-align: left;">
+        <thead style="background-color: #0056b3; color: white;">
+            <tr>
+                <th>Hadiah</th>
+                <th>Penyedia</th>
+                <th>Miles Dibutuhkan</th>
+                <th>Validitas</th>
+                <th>Deskripsi</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Simulasi Looping Data -->
+            <tr>
+                <td>Voucher Hotel Rp 500k</td>
+                <td>Traveloka</td>
+                <td>5000</td>
+                <td>01 Mei 2026 - 31 Des 2026</td>
+                <td>Diskon menginap di seluruh mitra Traveloka.</td>
+                <td>
+                    <button class="btn-primary" onclick="confirmRedeem('RWD-001', 'Voucher Hotel Rp 500k', 5000)">Redeem</button>
+                </td>
+            </tr>
+            <tr>
+                <td>Tiket Masuk Dufan</td>
+                <td>Shopee</td>
+                <td>3000</td>
+                <td>01 Jun 2026 - 01 Ags 2026</td>
+                <td>Tiket reguler untuk 1 orang dewasa.</td>
+                <td>
+                    <button class="btn-primary" onclick="confirmRedeem('RWD-002', 'Tiket Masuk Dufan', 3000)">Redeem</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- RIWAYAT REDEEM -->
+<div style="background-color: #e2e3e5; padding: 15px; border-radius: 6px;">
+    <h3>Riwayat Redeem</h3>
+    <p style="font-size: 12px; color: #dc3545;">*Transaksi redeem yang sudah dibuat tidak dapat diubah atau dihapus.</p>
+    <table border="1" cellpadding="10" cellspacing="0" style="width: 100%; border-collapse: collapse; text-align: left; background-color: white;">
+        <thead style="background-color: #6c757d; color: white;">
+            <tr>
+                <th>Timestamp</th>
+                <th>Nama Hadiah</th>
+                <th>Miles Digunakan</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>2026-04-20 14:30:00</td>
+                <td>Kopi Kenangan Voucher</td>
+                <td>500</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+    function confirmRedeem(id, nama, miles) {
+        // Simulasi validasi miles
+        const saldoMiles = 8500; 
+        
+        if (saldoMiles < miles) {
+            alert("Gagal: Award miles Anda tidak mencukupi untuk menukarkan hadiah ini.");
+            return;
+        }
+
+        const konfirmasi = confirm(`Anda yakin ingin menukarkan ${miles} miles untuk hadiah "${nama}"?`);
+        if (konfirmasi) {
+            alert("Berhasil! Miles Anda telah dipotong dan transaksi dicatat.");
+            // Di TK04, bagian ini akan melakukan submit form POST ke backend
+        }
+    }
+</script>
+{% endblock %}

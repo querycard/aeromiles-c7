@@ -178,3 +178,9 @@ def profile_view(request):
             user_data['kode_maskapai'] = s_row[1]
 
     return render(request, 'profile.html', {'user': user_data})
+
+def logout_view(request):
+    if request.method == 'POST':
+        request.session.flush() # Menghapus semua data session
+        messages.success(request, "Anda telah berhasil keluar dari sistem.")
+    return redirect('authUser:login')
