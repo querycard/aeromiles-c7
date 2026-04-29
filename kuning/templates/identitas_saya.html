@@ -2,128 +2,152 @@
 
 {% block content %}
 <style>
-    /* DESIGN SYSTEM AEROMILES - IDENTITAS MEMBER */
-    .page-wrapper {
-        padding: 30px 40px;
-        background-color: #f8f9fa;
-        min-height: 80vh;
-        font-family: Arial, sans-serif;
-    }
+/* CSS TAMPILAN IDENTITAS MEMBER (Konsisten dengan Kelola Member) */
+.member-page {
+    padding: 0 30px;
+}
 
-    .page-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 25px;
-    }
+/* Header */
+.page-header { margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+.page-title { font-size: 20px; font-weight: 700; color: #0a1f44; }
 
-    .page-title { color: #1a1a1a; margin: 0; font-size: 24px; }
+/* Controls */
+.btn-primary {
+    background: #001f4d;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+}
+.btn-primary:hover { background: #002d6b; }
 
-    .btn-primary {
-        background-color: #002d6b;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 6px;
-        cursor: pointer;
-        font-weight: bold;
-        transition: background-color 0.2s;
-    }
-    .btn-primary:hover { background-color: #001f4d; }
+/* Table */
+.table-container {
+    background: white;
+    border-radius: 12px;
+    border: 1px solid #e4ebf5;
+    overflow: hidden;
+}
 
-    /* Table Styles */
-    .table-container {
-        background-color: white;
-        border-radius: 8px;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-        overflow: hidden;
-    }
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+}
 
-    .data-table {
-        width: 100%;
-        border-collapse: collapse;
-        text-align: left;
-    }
+.data-table th {
+    background: #ffffff;
+    padding: 12px 14px;
+    font-size: 11.5px;
+    color: #6b7fa3;
+    text-transform: capitalize;
+    border-bottom: 1px solid #e4ebf5;
+    text-align: left;
+}
 
-    .data-table th {
-        background-color: #fcfcfc;
-        padding: 15px;
-        font-size: 13px;
-        color: #666;
-        border-bottom: 2px solid #eee;
-    }
+.data-table td {
+    padding: 13px 14px;
+    font-size: 13px;
+    border-bottom: 1px solid #f1f5fb;
+    vertical-align: middle;
+    color: #333;
+    font-weight: 500;
+}
 
-    .data-table td {
-        padding: 15px;
-        font-size: 14px;
-        color: #333;
-        border-bottom: 1px solid #eee;
-    }
+.data-table tr:hover td { background: #f7faff; }
 
-    /* Status Badges */
-    .status-badge {
-        padding: 5px 12px;
-        border-radius: 20px;
-        font-size: 12px;
-        font-weight: bold;
-    }
-    .status-aktif { background-color: #d4edda; color: #155724; }
-    .status-expired { background-color: #f8d7da; color: #721c24; }
+/* Penengah Posisi Kolom */
+.text-center { text-align: center !important; }
 
-    .action-btn {
-        background: none;
-        border: none;
-        cursor: pointer;
-        font-size: 16px;
-        margin-right: 10px;
-        color: #666;
-    }
-    .action-btn:hover { color: #002d6b; }
+/* Status Badges */
+.status-badge {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+}
+.status-aktif { background-color: #d4edda; color: #155724; }
+.status-expired { background-color: #f8d7da; color: #721c24; }
 
-    /* Modal Styles */
-    .modal-overlay {
-        display: none;
-        position: fixed;
-        top: 0; left: 0; width: 100%; height: 100%;
-        background-color: rgba(0,0,0,0.5);
-        z-index: 1000;
-        justify-content: center;
-        align-items: center;
-    }
+.action-btn {
+    border: 1px solid #d8e2f0; /* Ini yang bikin outlinenya muncul */
+    background: #ffffff; /* Background putih biar misah sama tabel */
+    cursor: pointer;
+    font-size: 14px;
+    margin: 0 4px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05); 
+}
+.action-btn:hover { 
+    background: #f1f5fb;
+    border-color: #003380; 
+}
+.action-btn.delete { 
+    color: #ef4444; 
+}
+.action-btn.delete:hover { 
+    background: #fef2f2;
+    border-color: #fca5a5; 
+}
 
-    .modal-box {
-        background-color: white;
-        border-radius: 10px;
-        width: 100%;
-        max-width: 500px;
-        padding: 25px 30px;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-    }
+/* Modal */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(1,15,40,.5);
+    z-index: 2000;
+    justify-content: center;
+    align-items: center;
+}
 
-    .modal-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-    }
+.modal-box {
+    background: white;
+    border-radius: 12px;
+    border: 1px solid #e4ebf5;
+    width: 100%;
+    max-width: 520px;
+    padding: 20px 25px;
+}
 
-    .form-group { margin-bottom: 15px; }
-    .form-group label { display: block; margin-bottom: 5px; font-size: 13px; font-weight: bold; color: #555; }
-    .form-group input, .form-group select {
-        width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;
-    }
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    align-items: center;
+}
 
-    .modal-footer {
-        display: flex;
-        justify-content: flex-end;
-        gap: 10px;
-        margin-top: 20px;
-    }
+.form-row { display: flex; gap: 12px; margin-bottom: 12px; }
+.form-group { flex: 1; }
+.form-group label {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    color: #6b7fa3;
+    margin-bottom: 5px;
+}
+.form-group input, .form-group select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #d8e2f0;
+    border-radius: 6px;
+    box-sizing: border-box;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 20px;
+}
 </style>
 
-<div class="page-wrapper">
+<div class="member-page">
     <div class="page-header">
-        <h2 class="page-title">Identitas Saya</h2>
+        <div class="page-title">Identitas Saya</div>
         <button class="btn-primary" onclick="openModal('modalTambah')">+ Tambah Identitas</button>
     </div>
 
@@ -133,36 +157,36 @@
                 <tr>
                     <th>No. Dokumen</th>
                     <th>Jenis</th>
-                    <th>Negara Penerbit</th>
+                    <th>Negara</th>
                     <th>Terbit</th>
                     <th>Habis</th>
                     <th>Status</th>
-                    <th>Aksi</th>
+                    <th class="text-center">Aksi</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td>A12345678</td>
+                    <td><b>A12345678</b></td>
                     <td>Paspor</td>
                     <td>Indonesia</td>
                     <td>2020-01-15</td>
                     <td>2030-01-15</td>
                     <td><span class="status-badge status-aktif">Aktif</span></td>
-                    <td>
+                    <td class="text-center">
                         <button class="action-btn" onclick="openModal('modalEdit')" title="Edit">✏️</button>
-                        <button class="action-btn" onclick="openModal('modalHapus')" title="Hapus">🗑️</button>
+                        <button class="action-btn delete" onclick="openModal('modalHapus')" title="Hapus">🗑️</button>
                     </td>
                 </tr>
                 <tr>
-                    <td>3275012345678901</td>
+                    <td><b>3275012345678901</b></td>
                     <td>KTP</td>
                     <td>Indonesia</td>
                     <td>2010-06-01</td>
                     <td>2024-06-01</td>
                     <td><span class="status-badge status-expired">Kedaluwarsa</span></td>
-                    <td>
+                    <td class="text-center">
                         <button class="action-btn" onclick="openModal('modalEdit')" title="Edit">✏️</button>
-                        <button class="action-btn" onclick="openModal('modalHapus')" title="Hapus">🗑️</button>
+                        <button class="action-btn delete" onclick="openModal('modalHapus')" title="Hapus">🗑️</button>
                     </td>
                 </tr>
             </tbody>
@@ -173,39 +197,44 @@
 <div id="modalTambah" class="modal-overlay">
     <div class="modal-box">
         <div class="modal-header">
-            <h3>Tambah Identitas Baru</h3>
-            <button class="action-btn" onclick="closeModal('modalTambah')">&times;</button>
+            <div class="page-title" style="font-size: 16px;">Tambah Identitas Baru</div>
+            <button style="background:none; border:none; font-size:18px; cursor:pointer; color:#6b7fa3;" onclick="closeModal('modalTambah')">✖</button>
         </div>
         <form action="" method="POST">
             {% csrf_token %}
-            <div class="form-group">
-                <label>Nomor Dokumen</label>
-                <input type="text" name="nomor" placeholder="Contoh: A1234567" required>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Nomor Dokumen</label>
+                    <input type="text" name="nomor" placeholder="Contoh: A1234567" required>
+                </div>
             </div>
-            <div class="form-group">
-                <label>Jenis Dokumen</label>
-                <select name="jenis">
-                    <option value="Paspor">Paspor</option>
-                    <option value="KTP">KTP</option>
-                    <option value="SIM">SIM</option>
-                </select>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Jenis Dokumen</label>
+                    <select name="jenis">
+                        <option value="Paspor">Paspor</option>
+                        <option value="KTP">KTP</option>
+                        <option value="SIM">SIM</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Negara Penerbit</label>
+                    <input type="text" name="negara_penerbit" value="Indonesia" required>
+                </div>
             </div>
-            <div class="form-group">
-                <label>Negara Penerbit</label>
-                <input type="text" name="negara_penerbit" value="Indonesia" required>
-            </div>
-            <div style="display: flex; gap: 10px;">
-                <div class="form-group" style="flex: 1;">
+            <div class="form-row">
+                <div class="form-group">
                     <label>Tanggal Terbit</label>
                     <input type="date" name="tanggal_terbit" required>
                 </div>
-                <div class="form-group" style="flex: 1;">
+                <div class="form-group">
                     <label>Tanggal Habis</label>
                     <input type="date" name="tanggal_habis" required>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn-primary" onclick="closeModal('modalTambah')">Simpan</button>
+                <button type="button" class="btn-primary" style="background: white; color: #001f4d; border: 1px solid #d8e2f0;" onclick="closeModal('modalTambah')">Batal</button>
+                <button type="submit" class="btn-primary">Simpan</button>
             </div>
         </form>
     </div>
@@ -214,39 +243,53 @@
 <div id="modalEdit" class="modal-overlay">
     <div class="modal-box">
         <div class="modal-header">
-            <h3>Edit Identitas</h3>
-            <button class="action-btn" onclick="closeModal('modalEdit')">&times;</button>
+            <div class="page-title" style="font-size: 16px;">Edit Identitas</div>
+            <button style="background:none; border:none; font-size:18px; cursor:pointer; color:#6b7fa3;" onclick="closeModal('modalEdit')">✖</button>
         </div>
         <form action="" method="POST">
             {% csrf_token %}
-            <div class="form-group">
-                <label>Nomor Dokumen (Tidak dapat diubah)</label>
-                <input type="text" value="A12345678" disabled style="background-color: #eee;">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Nomor Dokumen (Tidak dapat diubah)</label>
+                    <input type="text" value="A12345678" disabled style="background-color: #f1f5fb;">
+                </div>
             </div>
-            <div class="form-group">
-                <label>Jenis Dokumen</label>
-                <select name="jenis" disabled style="background-color: #eee;">
-                    <option value="Paspor" selected>Paspor</option>
-                </select>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Jenis Dokumen</label>
+                    <select name="jenis"  disabled style="background-color: #f1f5fb;">
+                        <option value="Paspor" selected>Paspor</option>
+                    </select>
+                </div>
             </div>
-            <div class="form-group">
-                <label>Tanggal Habis Baru</label>
-                <input type="date" name="tanggal_habis" value="2030-01-15">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Tanggal Terbit</label>
+                    <input type="date" name="tanggal_terbit" value="2030-01-15">
+                </div>
+                <div class="form-group">
+                    <label>Tanggal Habis</label>
+                    <input type="date" name="tanggal_habis" value="2030-01-15">
+                </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn-primary" onclick="closeModal('modalEdit')">Simpan Perubahan</button>
+                <button type="button" class="btn-primary" style="background: white; color: #001f4d; border: 1px solid #d8e2f0;" onclick="closeModal('modalEdit')">Batal</button>
+                <button type="submit" class="btn-primary">Simpan Perubahan</button>
             </div>
         </form>
     </div>
 </div>
 
 <div id="modalHapus" class="modal-overlay">
-    <div class="modal-box" style="max-width: 400px; text-align: center;">
-        <h3>Hapus Identitas?</h3>
-        <p style="font-size: 14px; color: #666; margin-bottom: 20px;">Tindakan ini tidak dapat dibatalkan.</p>
-        <div style="display: flex; justify-content: center; gap: 10px;">
-            <button class="btn-primary" style="background-color: #ccc; color: #333;" onclick="closeModal('modalHapus')">Batal</button>
-            <button class="btn-primary" style="background-color: #dc3545;" onclick="closeModal('modalHapus')">Hapus</button>
+    <div class="modal-box" style="max-width: 400px;">
+        <div class="modal-header">
+            <div class="page-title" style="font-size: 16px;">Hapus Identitas?</div>
+            <button style="background:none; border:none; font-size:18px; cursor:pointer; color:#6b7fa3;" onclick="closeModal('modalHapus')">✖</button>
+        </div>
+        <p style="font-size: 13px; color: #6b7fa3; margin-top: 0;">Tindakan ini tidak dapat dibatalkan.</p>
+        <div class="modal-footer">
+            <button type="button" class="btn-primary" style="background: white; color: #001f4d; border: 1px solid #d8e2f0;" onclick="closeModal('modalHapus')">Batal</button>
+            <button type="button" class="btn-primary" style="background: #dc2626;" onclick="closeModal('modalHapus')">Hapus Permanen</button>
         </div>
     </div>
 </div>
