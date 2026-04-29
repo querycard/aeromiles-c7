@@ -2,20 +2,14 @@
 
 {% block content %}
 <style>
-/* ✅ JANGAN pakai .page-wrapper lagi (itu dari base) */
+/* CSS TAMPILAN KELOLA MEMBER */
 .member-page {
     padding: 0 30px;
 }
 
 /* Header */
-.page-header {
-    margin-bottom: 20px;
-}
-.page-title {
-    font-size: 20px;
-    font-weight: 700;
-    color: #0a1f44;
-}
+.page-header { margin-bottom: 20px; }
+.page-title { font-size: 20px; font-weight: 700; color: #0a1f44; }
 
 /* Controls */
 .controls-bar {
@@ -30,6 +24,16 @@
     border: 1px solid #d8e2f0;
     border-radius: 6px;
     font-size: 13px;
+}
+
+.filter-dropdown {
+    padding: 9px 12px;
+    border: 1px solid #d8e2f0;
+    border-radius: 6px;
+    font-size: 13px;
+    color: #6b7fa3;
+    background-color: white;
+    cursor: pointer;
 }
 
 .btn-primary {
@@ -57,23 +61,28 @@
 }
 
 .data-table th {
-    background: #f7f9fc;
+    background: #ffffff; /* Ubah ke putih biar mirip screenshot */
     padding: 12px 14px;
     font-size: 11.5px;
     color: #6b7fa3;
-    text-transform: uppercase;
+    text-transform: capitalize; /* Biar ngga uppercase semua */
     border-bottom: 1px solid #e4ebf5;
+    text-align: left;
 }
 
 .data-table td {
     padding: 13px 14px;
     font-size: 13px;
     border-bottom: 1px solid #f1f5fb;
+    vertical-align: middle;
+    color: #333;
+    font-weight: 500;
 }
 
-.data-table tr:hover td {
-    background: #f7faff;
-}
+.data-table tr:hover td { background: #f7faff; }
+
+/* Penengah Posisi Kolom */
+.text-center { text-align: center !important; }
 
 /* Badge */
 .tier-badge {
@@ -83,20 +92,28 @@
     font-weight: 600;
 }
 
-.tier-gold { background: #fff4e0; color: #a06000; }
-.tier-silver { background: #eef0f3; color: #454f60; }
-.tier-blue { background: #e0f7ff; color: #005f80; }
+.tier-gold { background: #f59e0b; color: #ffffff; } /* Sesuaikan warna gold di screenshot */
+.tier-silver { background: #e2e8f0; color: #475569; }
+.tier-blue { background: #0284c7; color: #ffffff; }
 
-/* Actions */
+/* Actions - Dengan Wrapper / Kotak Button */
 .action-btn {
-    border: none;
-    background: none;
+    border: 1px solid transparent; /* Hilangkan border abu biar lebih clean kaya gambar */
+    background: transparent;
     cursor: pointer;
     font-size: 14px;
-    margin-right: 6px;
+    margin: 0 4px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
 }
-.action-btn:hover { color: #003380; }
-.action-btn.delete:hover { color: #dc2626; }
+.action-btn:hover { 
+    background: #f1f5fb;
+}
+.action-btn.delete { color: #ef4444; }
+.action-btn.delete:hover { 
+    background: #fef2f2;
+}
 
 /* Modal */
 .modal-overlay {
@@ -115,37 +132,40 @@
     border: 1px solid #e4ebf5;
     width: 100%;
     max-width: 520px;
-    padding: 20px;
+    padding: 20px 25px;
 }
 
 .modal-header {
     display: flex;
     justify-content: space-between;
     margin-bottom: 15px;
+    align-items: center;
 }
 
-.form-row { display: flex; gap: 10px; margin-bottom: 12px; }
+.form-row { display: flex; gap: 12px; margin-bottom: 12px; }
 .form-group { flex: 1; }
 .form-group label {
+    display: block;
     font-size: 11px;
     font-weight: 600;
     color: #6b7fa3;
+    margin-bottom: 5px;
 }
 .form-group input, .form-group select {
     width: 100%;
     padding: 8px;
     border: 1px solid #d8e2f0;
     border-radius: 6px;
+    box-sizing: border-box;
 }
 
 .modal-footer {
     display: flex;
     justify-content: flex-end;
     gap: 8px;
-    margin-top: 15px;
+    margin-top: 20px;
 }
 </style>
-
 
 <div class="member-page">
     <div class="page-header">
@@ -153,34 +173,85 @@
     </div>
 
     <div class="controls-bar">
-        <div class="search-box">
-            <input type="text" placeholder="Cari member...">
+        <div style="display: flex; gap: 10px;">
+            <div class="search-box">
+                <input type="text" placeholder="Cari nama, email, atau nomor member...">
+            </div>
+            <select class="filter-dropdown">
+                <option value="semua">Semua Tier</option>
+                <option value="gold">Gold</option>
+                <option value="silver">Silver</option>
+                <option value="blue">Blue</option>
+            </select>
         </div>
-        <button class="btn-primary" onclick="openModal('modalTambah')">+ Tambah</button>
+        <button class="btn-primary" onclick="openModal('modalTambah')">+ Tambah Member</button>
     </div>
 
     <div class="table-container">
         <table class="data-table">
             <thead>
                 <tr>
-                    <th>No</th>
+                    <th>No. Member</th>
                     <th>Nama</th>
                     <th>Email</th>
                     <th>Tier</th>
-                    <th>Miles</th>
-                    <th>Aksi</th>
+                    <th>Total Miles</th>
+                    <th>Award Miles</th>
+                    <th>Bergabung</th>
+                    <th class="text-center">Aksi</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td>M001</td>
-                    <td>John Doe</td>
-                    <td>john@mail.com</td>
+                    <td><b>M0001</b></td>
+                    <td>Mr. John William Doe</td>
+                    <td>john@example.com</td>
                     <td><span class="tier-badge tier-gold">Gold</span></td>
                     <td>45,000</td>
-                    <td>
-                        <button class="action-btn" onclick="openModal('modalEdit')">✏️</button>
-                        <button class="action-btn delete" onclick="openModal('modalHapus')">🗑️</button>
+                    <td>32,000</td>
+                    <td>2024-01-15</td>
+                    <td class="text-center">
+                        <button type="button" class="action-btn" onclick="openModal('modalEdit')" title="Edit">✏️</button>
+                        <button type="button" class="action-btn delete" onclick="openModal('modalHapus')" title="Hapus">🗑️</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td><b>M0002</b></td>
+                    <td>Mrs. Jane Smith</td>
+                    <td>jane@example.com</td>
+                    <td><span class="tier-badge tier-silver">Silver</span></td>
+                    <td>20,000</td>
+                    <td>15,000</td>
+                    <td>2024-03-10</td>
+                    <td class="text-center">
+                        <button type="button" class="action-btn" onclick="openModal('modalEdit')" title="Edit">✏️</button>
+                        <button type="button" class="action-btn delete" onclick="openModal('modalHapus')" title="Hapus">🗑️</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td><b>M0003</b></td>
+                    <td>Mr. Budi Anto Santoso</td>
+                    <td>budi@example.com</td>
+                    <td><span class="tier-badge tier-blue">Blue</span></td>
+                    <td>5,000</td>
+                    <td>3,500</td>
+                    <td>2024-06-20</td>
+                    <td class="text-center">
+                        <button type="button" class="action-btn" onclick="openModal('modalEdit')" title="Edit">✏️</button>
+                        <button type="button" class="action-btn delete" onclick="openModal('modalHapus')" title="Hapus">🗑️</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td><b>M0004</b></td>
+                    <td>Mr. John Lennon</td>
+                    <td>johnlennon@gmail.com</td>
+                    <td><span class="tier-badge tier-blue">Blue</span></td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>2026-04-12</td>
+                    <td class="text-center">
+                        <button type="button" class="action-btn" onclick="openModal('modalEdit')" title="Edit">✏️</button>
+                        <button type="button" class="action-btn delete" onclick="openModal('modalHapus')" title="Hapus">🗑️</button>
                     </td>
                 </tr>
             </tbody>
@@ -188,6 +259,178 @@
     </div>
 </div>
 
+<div id="modalTambah" class="modal-overlay">
+    <div class="modal-box">
+        <div class="modal-header">
+            <div class="page-title" style="font-size: 16px;">Tambah Member Baru</div>
+            <button style="background:none; border:none; font-size:18px; cursor:pointer; color:#6b7fa3;" onclick="closeModal('modalTambah')">✖</button>
+        </div>
+        <form action="" method="POST">
+            {% csrf_token %}
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" name="password" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group" style="flex: 0.4;">
+                    <label>Salutation</label>
+                    <select name="salutation" required>
+                        <option value="Mr.">Mr.</option>
+                        <option value="Mrs.">Mrs.</option>
+                        <option value="Ms.">Ms.</option>
+                        <option value="Dr.">Dr.</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Nama Depan</label>
+                    <input type="text" name="nama_depan" required>
+                </div>
+                <div class="form-group">
+                    <label>Nama Tengah</label>
+                    <input type="text" name="nama_tengah" required>
+                </div>
+                <div class="form-group">
+                    <label>Nama Belakang</label>
+                    <input type="text" name="nama_belakang" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Kewarganegaraan</label>
+                    <select name="kewarganegaraan" required>
+                        <option value="Indonesia">Indonesia</option>
+                        <option value="Malaysia">Malaysia</option>
+                        <option value="Singapore">Singapore</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group" style="flex: 0.4;">
+                    <label>Country Code</label>
+                    <select name="country_code" required>
+                        <option value="+62">+62 (ID)</option>
+                        <option value="+65">+65 (SG)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Nomor HP</label>
+                    <input type="text" name="nomor_hp" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Tanggal Lahir</label>
+                    <input type="date" name="tanggal_lahir" required>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-primary" style="background: white; color: #001f4d; border: 1px solid #d8e2f0;" onclick="closeModal('modalTambah')">Batal</button>
+                <button type="submit" class="btn-primary">Simpan</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="modalEdit" class="modal-overlay">
+    <div class="modal-box">
+        <div class="modal-header">
+            <div class="page-title" style="font-size: 16px;">Edit Member</div>
+            <button style="background:none; border:none; font-size:18px; cursor:pointer; color:#6b7fa3;" onclick="closeModal('modalEdit')">✖</button>
+        </div>
+        <form action="" method="POST">
+            {% csrf_token %}
+            <div class="form-row">
+                <div class="form-group" style="flex: 0.5;">
+                    <label>Salutation</label>
+                    <select name="salutation">
+                        <option value="Mr." selected>Mr.</option>
+                        <option value="Mrs.">Mrs.</option>
+                        <option value="Ms.">Ms.</option>
+                        <option value="Dr.">Dr.</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Nama Depan</label>
+                    <input type="text" name="nama_depan" value="John">
+                </div>
+                <div class="form-group">
+                    <label>Nama Tengah</label>
+                    <input type="text" name="nama_tengah" value="William">
+                </div>
+                <div class="form-group">
+                    <label>Nama Belakang</label>
+                    <input type="text" name="nama_belakang" value="Doe">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Kewarganegaraan</label>
+                    <select name="kewarganegaraan">
+                        <option value="Indonesia" selected>Indonesia</option>
+                        <option value="Malaysia">Malaysia</option>
+                        <option value="Singapore">Singapore</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group" style="flex: 0.4;">
+                    <label>Country Code</label>
+                    <select name="country_code">
+                        <option value="+62" selected>+62</option>
+                        <option value="+65">+65</option>
+                        <option value="+60">+60</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Nomor HP</label>
+                    <input type="text" name="nomor_hp" value="81234567890">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Tanggal Lahir</label>
+                    <input type="date" name="tanggal_lahir" value="1990-05-15">
+                </div>
+                <div class="form-group">
+                    <label>Tier</label>
+                    <select name="tier">
+                        <option value="Blue">Blue</option>
+                        <option value="Silver">Silver</option>
+                        <option value="Gold" selected>Gold</option>
+                        <option value="Platinum">Platinum</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="submit" class="btn-primary">Simpan</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="modalHapus" class="modal-overlay">
+    <div class="modal-box" style="max-width: 400px;">
+        <div class="modal-header">
+            <div class="page-title" style="font-size: 16px;">Hapus Member?</div>
+            <button style="background:none; border:none; font-size:18px; cursor:pointer; color:#6b7fa3;" onclick="closeModal('modalHapus')">✖</button>
+        </div>
+        <p style="font-size: 13px; color: #6b7fa3; margin-top: 0;">Semua data terkait akan ikut terhapus. Tindakan ini tidak dapat dibatalkan.</p>
+        <div class="modal-footer">
+            <button type="button" class="btn-primary" style="background: white; color: #001f4d; border: 1px solid #d8e2f0;" onclick="closeModal('modalHapus')">Batal</button>
+            <button type="button" class="btn-primary" style="background: #dc2626;" onclick="closeModal('modalHapus')">Hapus Permanen</button>
+        </div>
+    </div>
+</div>
 
 <script>
 function openModal(id) {
@@ -195,6 +438,12 @@ function openModal(id) {
 }
 function closeModal(id) {
     document.getElementById(id).style.display = 'none';
+}
+
+window.onclick = function(event) {
+    if (event.target.classList.contains('modal-overlay')) {
+        event.target.style.display = 'none';
+    }
 }
 </script>
 {% endblock %}

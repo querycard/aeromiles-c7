@@ -1,0 +1,261 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    /* DESIGN SYSTEM AEROMILES - IDENTITAS MEMBER */
+    .page-wrapper {
+        padding: 30px 40px;
+        background-color: #f8f9fa;
+        min-height: 80vh;
+        font-family: Arial, sans-serif;
+    }
+
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+    }
+
+    .page-title { color: #1a1a1a; margin: 0; font-size: 24px; }
+
+    .btn-primary {
+        background-color: #002d6b;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: background-color 0.2s;
+    }
+    .btn-primary:hover { background-color: #001f4d; }
+
+    /* Table Styles */
+    .table-container {
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        overflow: hidden;
+    }
+
+    .data-table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: left;
+    }
+
+    .data-table th {
+        background-color: #fcfcfc;
+        padding: 15px;
+        font-size: 13px;
+        color: #666;
+        border-bottom: 2px solid #eee;
+    }
+
+    .data-table td {
+        padding: 15px;
+        font-size: 14px;
+        color: #333;
+        border-bottom: 1px solid #eee;
+    }
+
+    /* Status Badges */
+    .status-badge {
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: bold;
+    }
+    .status-aktif { background-color: #d4edda; color: #155724; }
+    .status-expired { background-color: #f8d7da; color: #721c24; }
+
+    .action-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+        margin-right: 10px;
+        color: #666;
+    }
+    .action-btn:hover { color: #002d6b; }
+
+    /* Modal Styles */
+    .modal-overlay {
+        display: none;
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background-color: rgba(0,0,0,0.5);
+        z-index: 1000;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .modal-box {
+        background-color: white;
+        border-radius: 10px;
+        width: 100%;
+        max-width: 500px;
+        padding: 25px 30px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .form-group { margin-bottom: 15px; }
+    .form-group label { display: block; margin-bottom: 5px; font-size: 13px; font-weight: bold; color: #555; }
+    .form-group input, .form-group select {
+        width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;
+    }
+
+    .modal-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 20px;
+    }
+</style>
+
+<div class="page-wrapper">
+    <div class="page-header">
+        <h2 class="page-title">Identitas Saya</h2>
+        <button class="btn-primary" onclick="openModal('modalTambah')">+ Tambah Identitas</button>
+    </div>
+
+    <div class="table-container">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>No. Dokumen</th>
+                    <th>Jenis</th>
+                    <th>Negara Penerbit</th>
+                    <th>Terbit</th>
+                    <th>Habis</th>
+                    <th>Status</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>A12345678</td>
+                    <td>Paspor</td>
+                    <td>Indonesia</td>
+                    <td>2020-01-15</td>
+                    <td>2030-01-15</td>
+                    <td><span class="status-badge status-aktif">Aktif</span></td>
+                    <td>
+                        <button class="action-btn" onclick="openModal('modalEdit')" title="Edit">✏️</button>
+                        <button class="action-btn" onclick="openModal('modalHapus')" title="Hapus">🗑️</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>3275012345678901</td>
+                    <td>KTP</td>
+                    <td>Indonesia</td>
+                    <td>2010-06-01</td>
+                    <td>2024-06-01</td>
+                    <td><span class="status-badge status-expired">Kedaluwarsa</span></td>
+                    <td>
+                        <button class="action-btn" onclick="openModal('modalEdit')" title="Edit">✏️</button>
+                        <button class="action-btn" onclick="openModal('modalHapus')" title="Hapus">🗑️</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div id="modalTambah" class="modal-overlay">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h3>Tambah Identitas Baru</h3>
+            <button class="action-btn" onclick="closeModal('modalTambah')">&times;</button>
+        </div>
+        <form action="" method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                <label>Nomor Dokumen</label>
+                <input type="text" name="nomor" placeholder="Contoh: A1234567" required>
+            </div>
+            <div class="form-group">
+                <label>Jenis Dokumen</label>
+                <select name="jenis">
+                    <option value="Paspor">Paspor</option>
+                    <option value="KTP">KTP</option>
+                    <option value="SIM">SIM</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Negara Penerbit</label>
+                <input type="text" name="negara_penerbit" value="Indonesia" required>
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <div class="form-group" style="flex: 1;">
+                    <label>Tanggal Terbit</label>
+                    <input type="date" name="tanggal_terbit" required>
+                </div>
+                <div class="form-group" style="flex: 1;">
+                    <label>Tanggal Habis</label>
+                    <input type="date" name="tanggal_habis" required>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-primary" onclick="closeModal('modalTambah')">Simpan</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="modalEdit" class="modal-overlay">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h3>Edit Identitas</h3>
+            <button class="action-btn" onclick="closeModal('modalEdit')">&times;</button>
+        </div>
+        <form action="" method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                <label>Nomor Dokumen (Tidak dapat diubah)</label>
+                <input type="text" value="A12345678" disabled style="background-color: #eee;">
+            </div>
+            <div class="form-group">
+                <label>Jenis Dokumen</label>
+                <select name="jenis" disabled style="background-color: #eee;">
+                    <option value="Paspor" selected>Paspor</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Tanggal Habis Baru</label>
+                <input type="date" name="tanggal_habis" value="2030-01-15">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-primary" onclick="closeModal('modalEdit')">Simpan Perubahan</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="modalHapus" class="modal-overlay">
+    <div class="modal-box" style="max-width: 400px; text-align: center;">
+        <h3>Hapus Identitas?</h3>
+        <p style="font-size: 14px; color: #666; margin-bottom: 20px;">Tindakan ini tidak dapat dibatalkan.</p>
+        <div style="display: flex; justify-content: center; gap: 10px;">
+            <button class="btn-primary" style="background-color: #ccc; color: #333;" onclick="closeModal('modalHapus')">Batal</button>
+            <button class="btn-primary" style="background-color: #dc3545;" onclick="closeModal('modalHapus')">Hapus</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openModal(id) { document.getElementById(id).style.display = 'flex'; }
+    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+    window.onclick = function(e) { 
+        if (e.target.className === 'modal-overlay') e.target.style.display = 'none'; 
+    }
+</script>
+{% endblock %}
