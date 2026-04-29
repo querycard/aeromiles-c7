@@ -4,15 +4,51 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AeroMiles</title>
-    </head>
-<body style="margin: 0; padding: 0; background-color: #f4f7f6;">
+
+    <!-- Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #f0f4f9;
+            --text: #0a1f44;
+            --navbar-h: 58px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        /* Biar konten ga ketiban navbar fixed */
+        .page-wrapper {
+            padding-top: calc(var(--navbar-h) + 35px);
+            min-height: 100vh;
+        }
+
+        main {
+            padding: 20px 30px;
+        }
+    </style>
+</head>
+
+<body>
 
     {% include 'navbar.html' %}
 
-    <main>
-        {% block content %}
-        {% endblock %}
-    </main>
+    <div class="page-wrapper">
+        <main>
+            {% block content %}
+            {% endblock %}
+        </main>
+    </div>
 
 </body>
 </html>

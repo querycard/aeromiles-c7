@@ -1,140 +1,127 @@
 <style>
-    /* NAVBAR AEROMILES DESIGN SYSTEM */
-    .nav-main-wrapper {
-        background-color: #001f4d; /* Navy Dark sesuai gambar */
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        color: white;
-    }
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
 
-    .navbar-container {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0 40px;
-        height: 60px;
-    }
+.aero-navbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  background: #001f4d;
+  font-family: 'Poppins', sans-serif;
+  z-index: 9999;
+  box-shadow: 0 4px 20px rgba(0,0,0,.3);
+}
 
-    .nav-brand {
-        font-size: 20px;
-        font-weight: bold;
-        text-decoration: none;
-        color: #00a8ff; /* Warna accent biru muda */
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
+.aero-top {
+  display: flex;
+  align-items: center;
+  height: 58px;
+  padding: 0 30px;
+}
 
-    .nav-links {
-        display: flex;
-        list-style: none;
-        margin: 0;
-        padding: 0;
-        height: 100%;
-    }
+.aero-brand {
+  color: #4db8ff;
+  font-weight: 700;
+  font-size: 17px;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
 
-    .nav-item {
-        display: flex;
-        align-items: center;
-    }
+.aero-menu {
+  display: flex;
+  margin-left: 20px;
+  gap: 4px;
+}
 
-    .nav-link {
-        color: #d1d1d1;
-        text-decoration: none;
-        padding: 0 15px;
-        font-size: 14px;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        transition: all 0.2s;
-    }
+.aero-link {
+  color: rgba(255,255,255,.7);
+  text-decoration: none;
+  font-size: 13px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  transition: .2s;
+}
 
-    .nav-link:hover {
-        color: white;
-        background-color: rgba(255, 255, 255, 0.1);
-    }
+.aero-link:hover {
+  background: rgba(255,255,255,.1);
+  color: white;
+}
 
-    /* Highlight untuk menu aktif */
-    .nav-link.active {
-        background-color: #003366;
-        color: white;
-    }
+.aero-user {
+  margin-left: auto;
+  text-align: right;
+  color: white;
+  font-size: 12px;
+}
 
-    .logout-btn {
-        color: #ff4d4d !important;
-        font-weight: bold;
-    }
+.aero-logout {
+  margin-left: 12px;
+  border: 1px solid rgba(255,80,80,.4);
+  color: #ff6b6b;
+  background: none;
+  padding: 5px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
 
-    /* Sub-Navbar untuk Info User */
-    .sub-navbar {
-        background-color: #001533;
-        padding: 8px 40px;
-        font-size: 11px;
-        color: #a0a0a0;
-        border-top: 1px solid rgba(255, 255, 255, 0.05);
-    }
-
-    .user-highlight {
-        color: #00a8ff;
-        font-weight: bold;
-    }
-
-    /* Search bar style for Guest Navbar */
-    .nav-search {
-        background: rgba(255, 255, 255, 0.1);
-        border: none;
-        border-radius: 4px;
-        padding: 6px 12px;
-        color: white;
-        font-size: 13px;
-        outline: none;
-    }
+.aero-sub {
+  background: #001533;
+  font-size: 11px;
+  padding: 6px 30px;
+  color: rgba(255,255,255,.5);
+}
 </style>
 
-<div class="nav-main-wrapper">
-    <div class="navbar-container">
-        <a href="{% url 'main:home' %}" class="nav-brand">
-            ✈️ AeroMiles
-        </a>
 
-        <ul class="nav-links">
-            {% if not current_user.is_authenticated %}
-                <li class="nav-item">
-                    <a href="{% url 'authUser:login' %}" class="nav-link">Login</a>
-                </li>
+<div class="aero-navbar">
+  <div class="aero-top">
 
-            {% elif current_user.role == 'member' %}
-                <li class="nav-item"><a class="nav-link">Dashboard</a></li> 
-                <li class="nav-item"><a class="nav-link">Identitas Saya</a></li> 
-                <li class="nav-item"><a class="nav-link">Klaim Miles</a></li>
-                <li class="nav-item"><a class="nav-link">Transfer Miles</a></li> 
-                <li class="nav-item"><a class="nav-link">Redeem Hadiah</a></li> 
-                <li class="nav-item"><a class="nav-link">Beli Package</a></li> 
-                <li class="nav-item"><a class="nav-link">Info Tier</a></li> 
-                <li class="nav-item"><a class="nav-link">Pengaturan Profil</a></li> 
-                <li class="nav-item">    
-                        <button type="submit" class="nav-link logout-btn" style="background:none; border:none; cursor:pointer;">Logout</button>
-                </li>
+    <a href="{% url 'main:home' %}" class="aero-brand">
+      ✈️ AeroMiles
+    </a>
 
-            {% elif current_user.role == 'staff' %}
-                <li class="nav-item"><a class="nav-link">Dashboard</a></li> 
-                <li class="nav-item"><a  class="nav-link">Kelola Member</a></li>
-                <li class="nav-item"><a class="nav-link">Kelola Klaim</a></li> 
-                <li class="nav-item"><a class="nav-link">Kelola Hadiah</a></li> 
-                <li class="nav-item"><a class="nav-link">Kelola Mitra</a></li> 
-                <li class="nav-item"><a class="nav-link">Laporan Transaksi</a></li> 
-                <li class="nav-item"><a class="nav-link">Pengaturan Profil</a></li> 
-                <li class="nav-item">
-                    
-                        <button type="submit" class="nav-link logout-btn" style="background:none; border:none; cursor:pointer;">Logout</button>
-                   
-                </li>
-            {% endif %}
-        </ul>
+    <!-- Menu (kiri) -->
+    <div class="aero-menu">
+      {% if current_user.is_authenticated %}
+        
+        {% if current_user.role == 'member' %}
+          <a class="aero-link">Dashboard</a>
+          <a class="aero-link">Identitas</a>
+          <a class="aero-link">Klaim</a>
+          <a class="aero-link">Transfer</a>
+          <a class="aero-link">Redeem</a>
+
+        {% elif current_user.role == 'staff' %}
+          <a class="aero-link">Dashboard</a>
+          <a class="aero-link">Kelola Member</a>
+          <a class="aero-link">Kelola Klaim</a>
+        {% endif %}
+
+      {% endif %}
     </div>
 
-    {% if current_user.is_authenticated %}
-    <div class="sub-navbar">
-        Masuk sebagai <span class="user-highlight">{{ current_user.get_nama_lengkap }}</span> - {{ current_user.role|capfirst }}
-    </div>
+    <!-- KANAN -->
+    {% if not current_user.is_authenticated %}
+      <div style="margin-left:auto;">
+        <a href="{% url 'authUser:login' %}" class="aero-link">Login</a>
+      </div>
+
+    {% else %}
+      <div class="aero-user">
+        {{ current_user.get_nama_lengkap }} ({{ current_user.role }})
+
+        <form method="POST" style="display:inline;">
+          {% csrf_token %}
+          <button class="aero-logout">Logout</button>
+        </form>
+      </div>
     {% endif %}
+
+  </div>
+
+  {% if current_user.is_authenticated %}
+  <div class="aero-sub">
+    Masuk sebagai {{ current_user.get_nama_lengkap }}
+  </div>
+  {% endif %}
 </div>
