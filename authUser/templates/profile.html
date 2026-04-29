@@ -2,6 +2,79 @@
 {% block title %}Pengaturan Profil{% endblock %}
 
 {% block content %}
+<style>
+    /* CSS Khusus untuk Form Profil mengimbangi base.html yang baru */
+    .profile-container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: white;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+    .profile-container h2 {
+        margin-top: 0;
+        margin-bottom: 25px;
+        color: #001f4d; /* Menyesuaikan warna navbar */
+    }
+    .profile-container h3 {
+        margin-top: 20px;
+        margin-bottom: 15px;
+        font-size: 16px;
+        color: #001f4d;
+    }
+    .form-group {
+        margin-bottom: 15px;
+    }
+    .form-group label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 6px;
+        font-size: 13px;
+        color: #333;
+    }
+    .form-group input, .form-group select {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid #cbd5e1;
+        border-radius: 6px;
+        box-sizing: border-box;
+        font-family: 'Poppins', sans-serif;
+        font-size: 14px;
+        transition: border-color 0.2s;
+    }
+    .form-group input:focus, .form-group select:focus {
+        outline: none;
+        border-color: #4db8ff;
+    }
+    .form-group input[readonly] {
+        background-color: #f8fafc;
+        color: #64748b;
+        cursor: not-allowed;
+    }
+    .btn-save {
+        background-color: #001f4d;
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 600;
+        font-family: 'Poppins', sans-serif;
+        width: 100%;
+        margin-top: 10px;
+        transition: 0.2s;
+    }
+    .btn-save:hover {
+        background-color: #001533;
+    }
+    hr {
+        border: none;
+        border-top: 1px solid #e2e8f0;
+        margin: 25px 0;
+    }
+</style>
     <h2>Pengaturan Profil</h2>
     <form method="POST" action="">
         {% csrf_token %}
