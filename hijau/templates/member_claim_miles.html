@@ -1,556 +1,127 @@
 {% extends 'base.html' %}
-
-<!DOCTYPE html>
-<html lang="id">
-<head>
-   <meta charset="UTF-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>Preview Front-End Klaim</title>
-   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-   <style>
-       /* Basic reset untuk mensimulasikan halaman full */
-       body {
-           margin: 0;
-           padding: 20px;
-           background-color: #e2e8f0;
-           font-family: 'Inter', sans-serif;
-       }
-
-
-       /* Container & Dashboard */
-       .claim-dashboard {
-           background-color: #f8fafc;
-           padding: 30px;
-           border-radius: 8px;
-           color: #334155;
-           max-width: 1200px;
-           margin: 0 auto;
-           box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-       }
-
-
-       .dashboard-header {
-           display: flex;
-           justify-content: space-between;
-           align-items: center;
-           margin-bottom: 20px;
-       }
-
-
-       .dashboard-header h2 {
-           font-size: 24px;
-           font-weight: 600;
-           color: #0f172a;
-           margin: 0;
-       }
-
-
-       /* Buttons */
-       .btn-primary {
-           background-color: #1e3a8a;
-           color: #ffffff;
-           border: none;
-           padding: 10px 16px;
-           border-radius: 6px;
-           cursor: pointer;
-           font-weight: 500;
-           font-size: 14px;
-           transition: background 0.3s ease;
-       }
-
-
-       .btn-primary:hover { background-color: #172554; }
-       .btn-primary.btn-danger { background-color: #1e3a8a; }
-
-
-       .btn-outline {
-           background-color: transparent;
-           color: #475569;
-           border: 1px solid #cbd5e1;
-           padding: 8px 16px;
-           border-radius: 6px;
-           cursor: pointer;
-           font-weight: 500;
-           margin-right: 10px;
-       }
-
-
-       .icon-btn {
-           background: none;
-           border: none;
-           cursor: pointer;
-           font-size: 16px;
-           color: #64748b;
-           padding: 4px;
-       }
-       .icon-btn.edit-btn:hover { color: #3b82f6; }
-       .icon-btn.delete-btn:hover { color: #ef4444; }
-
-
-       /* Filters */
-       .filter-group {
-           display: flex;
-           gap: 10px;
-           margin-bottom: 20px;
-       }
-
-
-       .filter-btn {
-           padding: 6px 12px;
-           border: 1px solid #e2e8f0;
-           background: #ffffff;
-           border-radius: 6px;
-           text-decoration: none;
-           color: #64748b;
-           font-size: 14px;
-           cursor: pointer;
-       }
-
-
-       .filter-btn.active {
-           background-color: #1e3a8a;
-           color: #ffffff;
-           border-color: #1e3a8a;
-       }
-
-
-       /* Table */
-       .table-container {
-           background: #ffffff;
-           border: 1px solid #e2e8f0;
-           border-radius: 8px;
-           overflow-x: auto;
-       }
-
-
-       .claim-table {
-           width: 100%;
-           border-collapse: collapse;
-       }
-
-
-       .claim-table th, .claim-table td {
-           padding: 14px 20px;
-           text-align: left;
-           border-bottom: 1px solid #f1f5f9;
-           font-size: 14px;
-       }
-
-
-       .claim-table th {
-           font-weight: 600;
-           color: #64748b;
-           background-color: #f8fafc;
-       }
-
-
-       /* Badges */
-       .badge {
-           padding: 4px 10px;
-           border-radius: 20px;
-           font-size: 12px;
-           font-weight: 500;
-       }
-
-
-       .status-menunggu { background-color: #f59e0b; color: #ffffff; }
-       .status-disetujui { background-color: #10b981; color: #ffffff; }
-       .status-ditolak { background-color: #ef4444; color: #ffffff; }
-
-
-       /* Modals */
-       .modal {
-           display: none;
-           position: fixed;
-           z-index: 1000;
-           left: 0;
-           top: 0;
-           width: 100%;
-           height: 100%;
-           background-color: rgba(15, 23, 42, 0.6);
-           align-items: center;
-           justify-content: center;
-       }
-
-
-       .modal-content {
-           background-color: #ffffff;
-           padding: 24px;
-           border-radius: 8px;
-           width: 100%;
-           max-width: 600px;
-           box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-           /* Reset box-sizing for modal content */
-           box-sizing: border-box;
-       }
-
-
-       .delete-modal-content {
-           max-width: 400px;
-           text-align: center;
-       }
-
-
-       .delete-modal-content h3 { margin-bottom: 10px; margin-top: 0; }
-       .delete-modal-content p { color: #64748b; margin-bottom: 20px; }
-
-
-       .modal-header {
-           display: flex;
-           justify-content: space-between;
-           align-items: center;
-           margin-bottom: 20px;
-           border-bottom: 1px solid #e2e8f0;
-           padding-bottom: 10px;
-       }
-
-
-       .modal-header h3 { margin: 0; font-size: 18px; color: #0f172a;}
-       .close { font-size: 24px; color: #94a3b8; cursor: pointer; }
-
-
-       /* Forms */
-       .form-grid {
-           display: grid;
-           grid-template-columns: 1fr 1fr;
-           gap: 16px;
-       }
-
-
-       .form-group label {
-           display: block;
-           margin-bottom: 6px;
-           font-size: 13px;
-           font-weight: 500;
-           color: #475569;
-       }
-
-
-       .form-group input, .form-group select {
-           width: 100%;
-           padding: 10px;
-           border: 1px solid #cbd5e1;
-           border-radius: 6px;
-           font-size: 14px;
-           box-sizing: border-box;
-           font-family: inherit;
-       }
-
-
-       .form-group input:focus, .form-group select:focus {
-           outline: none;
-           border-color: #3b82f6;
-           box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-       }
-
-
-       .modal-footer {
-           margin-top: 24px;
-           display: flex;
-           justify-content: flex-end;
-       }
-
-
-       .modal-footer.flex-end {
-           justify-content: center;
-           gap: 10px;
-       }
-   </style>
-</head>
-<body>
-
-
-<div class="claim-dashboard">
-   <div class="dashboard-header">
-       <h2>Klaim Missing Miles</h2>
-       <button class="btn-primary" onclick="openModal('createModal')">
-           <span>+</span> Ajukan Klaim
-       </button>
-   </div>
-
-
-   <!-- Filter Status -->
-   <div class="filter-group">
-       <button class="filter-btn active">Semua</button>
-       <button class="filter-btn">Menunggu</button>
-       <button class="filter-btn">Disetujui</button>
-       <button class="filter-btn">Ditolak</button>
-   </div>
-
-
-   <!-- Tabel Riwayat (Read) -->
-   <div class="table-container">
-       <table class="claim-table">
-           <thead>
-               <tr>
-                   <th>No. Klaim</th>
-                   <th>Maskapai</th>
-                   <th>Rute</th>
-                   <th>Tanggal</th>
-                   <th>Flight</th>
-                   <th>Kelas</th>
-                   <th>Status</th>
-                   <th>Tanggal Pengajuan</th>
-                   <th>Aksi</th>
-               </tr>
-           </thead>
-           <tbody>
-               <!-- DUMMY DATA 1: Status Menunggu -->
-               <tr>
-                   <td>CLM-001</td>
-                   <td>GA</td>
-                   <td>CGK &rarr; DPS</td>
-                   <td>2026-04-25</td>
-                   <td>GA198</td>
-                   <td>Economy</td>
-                   <td>
-                       <span class="badge status-menunggu">Menunggu</span>
-                   </td>
-                   <td>2026-04-29 10:30:00</td>
-                   <td class="action-cell">
-                       <!-- Tombol edit memanggil fungsi javascript beserta data palsunya -->
-                       <button class="icon-btn edit-btn" onclick="openEditModal(`1`, `GA`, `CGK`, `DPS`, `2026-04-25`, `GA198`, `126482910`, `Economy`, `QWERTY`)">✎</button>
-                       <button class="icon-btn delete-btn" onclick="openDeleteModal(`1`)">🗑</button>
-                   </td>
-               </tr>
-
-
-               <!-- DUMMY DATA 2: Status Disetujui -->
-               <tr>
-                   <td>CLM-002</td>
-                   <td>SQ</td>
-                   <td>SIN &rarr; NRT</td>
-                   <td>2026-03-15</td>
-                   <td>SQ638</td>
-                   <td>Business</td>
-                   <td>
-                       <span class="badge status-disetujui">Disetujui</span>
-                   </td>
-                   <td>2026-03-20 09:15:00</td>
-                   <td class="action-cell">
-                       <!-- Tidak ada tombol aksi jika sudah disetujui -->
-                       -
-                   </td>
-               </tr>
-
-
-               <!-- DUMMY DATA 3: Status Ditolak -->
-               <tr>
-                   <td>CLM-003</td>
-                   <td>JT</td>
-                   <td>SUB &rarr; CGK</td>
-                   <td>2026-02-10</td>
-                   <td>JT690</td>
-                   <td>Economy</td>
-                   <td>
-                       <span class="badge status-ditolak">Ditolak</span>
-                   </td>
-                   <td>2026-02-12 14:00:00</td>
-                   <td class="action-cell">
-                       <!-- Tidak ada tombol aksi jika ditolak -->
-                       -
-                   </td>
-               </tr>
-           </tbody>
-       </table>
-   </div>
+{% block title %}Klaim Missing Miles{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    <h2 style="margin: 0; color: #0f172a;">Riwayat Klaim Miles Anda</h2>
+    <button class="btn-primary" onclick="openClaimModal('create')" style="display: flex; align-items: center; gap: 8px;">
+        <span style="font-size: 18px;">+</span> Ajukan Klaim
+    </button>
 </div>
 
-
-<!-- MODAL: CREATE (Ajukan Klaim Baru) -->
-<div id="createModal" class="modal">
-   <div class="modal-content">
-       <div class="modal-header">
-           <h3>Ajukan Klaim Baru</h3>
-           <span class="close" onclick="closeModal('createModal')">&times;</span>
-       </div>
-       <form action="#" method="GET">
-           <div class="form-grid">
-               <div class="form-group">
-                   <label>Maskapai</label>
-                   <select required>
-                       <option value="">Pilih Maskapai...</option>
-                       <option value="GA">GA - Garuda Indonesia</option>
-                       <option value="SQ">SQ - Singapore Airlines</option>
-                       <option value="JT">JT - Lion Air</option>
-                   </select>
-               </div>
-               <div class="form-group">
-                   <label>Kelas Kabin</label>
-                   <select required>
-                       <option value="Economy">Economy</option>
-                       <option value="Business">Business</option>
-                       <option value="First">First</option>
-                   </select>
-               </div>
-               <div class="form-group">
-                   <label>Bandara Asal</label>
-                   <select required>
-                       <option value="">Pilih...</option>
-                       <option value="CGK">CGK - Jakarta</option>
-                       <option value="DPS">DPS - Bali</option>
-                       <option value="SIN">SIN - Singapore</option>
-                   </select>
-               </div>
-               <div class="form-group">
-                   <label>Bandara Tujuan</label>
-                   <select required>
-                       <option value="">Pilih...</option>
-                       <option value="CGK">CGK - Jakarta</option>
-                       <option value="DPS">DPS - Bali</option>
-                       <option value="SIN">SIN - Singapore</option>
-                   </select>
-               </div>
-               <div class="form-group">
-                   <label>Tanggal Penerbangan</label>
-                   <input type="date" required>
-               </div>
-               <div class="form-group">
-                   <label>Flight Number</label>
-                   <input type="text" required placeholder="Contoh: GA198">
-               </div>
-               <div class="form-group">
-                   <label>Nomor Tiket</label>
-                   <input type="text" required>
-               </div>
-               <div class="form-group">
-                   <label>PNR</label>
-                   <input type="text" required>
-               </div>
-           </div>
-           <div class="modal-footer">
-               <button type="button" class="btn-primary" onclick="alert('Ini hanya preview. Form tidak dikirim.'); closeModal('createModal');">Ajukan</button>
-           </div>
-       </form>
-   </div>
+<!-- FILTER STATUS -->
+<div style="display: flex; gap: 10px; margin-bottom: 20px;">
+    <button style="padding: 6px 12px; border: 1px solid #1e3a8a; background: #1e3a8a; color: white; border-radius: 6px; cursor: pointer;">Semua</button>
+    <button style="padding: 6px 12px; border: 1px solid #e2e8f0; background: white; color: #64748b; border-radius: 6px; cursor: pointer;">Menunggu</button>
+    <button style="padding: 6px 12px; border: 1px solid #e2e8f0; background: white; color: #64748b; border-radius: 6px; cursor: pointer;">Disetujui</button>
+    <button style="padding: 6px 12px; border: 1px solid #e2e8f0; background: white; color: #64748b; border-radius: 6px; cursor: pointer;">Ditolak</button>
 </div>
 
-
-<!-- MODAL: UPDATE (Edit Klaim) -->
-<div id="editModal" class="modal">
-   <div class="modal-content">
-       <div class="modal-header">
-           <h3>Edit Klaim</h3>
-           <span class="close" onclick="closeModal('editModal')">&times;</span>
-       </div>
-       <form id="editForm" action="#">
-           <div class="form-grid">
-               <div class="form-group">
-                   <label>Maskapai</label>
-                   <select id="edit_maskapai" required>
-                       <option value="GA">GA</option>
-                       <option value="SQ">SQ</option>
-                       <option value="JT">JT</option>
-                   </select>
-               </div>
-               <div class="form-group">
-                   <label>Kelas Kabin</label>
-                   <select id="edit_kelas_kabin" required>
-                       <option value="Economy">Economy</option>
-                       <option value="Business">Business</option>
-                       <option value="First">First</option>
-                   </select>
-               </div>
-               <div class="form-group">
-                   <label>Bandara Asal</label>
-                   <select id="edit_bandara_asal" required>
-                       <option value="CGK">CGK</option>
-                       <option value="DPS">DPS</option>
-                       <option value="SIN">SIN</option>
-                       <option value="SUB">SUB</option>
-                   </select>
-               </div>
-               <div class="form-group">
-                   <label>Bandara Tujuan</label>
-                   <select id="edit_bandara_tujuan" required>
-                       <option value="CGK">CGK</option>
-                       <option value="DPS">DPS</option>
-                       <option value="SIN">SIN</option>
-                       <option value="SUB">SUB</option>
-                       <option value="NRT">NRT</option>
-                   </select>
-               </div>
-               <div class="form-group">
-                   <label>Tanggal Penerbangan</label>
-                   <input type="date" id="edit_tanggal" required>
-               </div>
-               <div class="form-group">
-                   <label>Flight Number</label>
-                   <input type="text" id="edit_flight" required>
-               </div>
-               <div class="form-group">
-                   <label>Nomor Tiket</label>
-                   <input type="text" id="edit_tiket" required>
-               </div>
-               <div class="form-group">
-                   <label>PNR</label>
-                   <input type="text" id="edit_pnr" required>
-               </div>
-           </div>
-           <div class="modal-footer">
-               <button type="button" class="btn-primary" onclick="alert('Data berhasil diupdate (Preview)'); closeModal('editModal');">Simpan</button>
-           </div>
-       </form>
-   </div>
+<!-- TABEL -->
+<div style="background-color: white; border-radius: 8px; border: 1px solid #e2e8f0; overflow-x: auto;">
+    <table style="width: 100%; border-collapse: collapse; text-align: left;">
+        <thead style="background-color: #f8fafc; color: #64748b;">
+            <tr>
+                <th style="padding: 14px 20px; border-bottom: 1px solid #f1f5f9; font-weight: 600;">No. Klaim</th>
+                <th style="padding: 14px 20px; border-bottom: 1px solid #f1f5f9; font-weight: 600;">Rute</th>
+                <th style="padding: 14px 20px; border-bottom: 1px solid #f1f5f9; font-weight: 600;">Tanggal</th>
+                <th style="padding: 14px 20px; border-bottom: 1px solid #f1f5f9; font-weight: 600;">Status</th>
+                <th style="padding: 14px 20px; border-bottom: 1px solid #f1f5f9; font-weight: 600;">Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="padding: 14px 20px; border-bottom: 1px solid #f1f5f9;">CLM-001</td>
+                <td style="padding: 14px 20px; border-bottom: 1px solid #f1f5f9;">GA (CGK &rarr; DPS)</td>
+                <td style="padding: 14px 20px; border-bottom: 1px solid #f1f5f9;">2026-04-25</td>
+                <td style="padding: 14px 20px; border-bottom: 1px solid #f1f5f9;">
+                    <span style="background-color: #f59e0b; color: white; padding: 4px 10px; border-radius: 20px; font-size: 12px;">Menunggu</span>
+                </td>
+                <td style="padding: 14px 20px; border-bottom: 1px solid #f1f5f9;">
+                    <button style="background: none; border: none; cursor: pointer; color: #3b82f6;" onclick="openClaimModal('edit')">✎</button>
+                    <button style="background: none; border: none; cursor: pointer; color: #ef4444;" onclick="openClaimModal('delete')">🗑</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </div>
 
+<!-- MODAL FORM KLAIM -->
+<div id="claimModal" style="display: none; position: fixed; inset: 0; background-color: rgba(15,23,42,0.6); align-items: center; justify-content: center; z-index: 1000;">
+    <div style="background-color: white; width: 600px; padding: 24px; border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.1);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px;">
+            <h3 id="formModalTitle" style="margin: 0; font-size: 18px; color: #0f172a;">Form Klaim</h3>
+            <button onclick="closeClaimModal()" style="background: none; border: none; font-size: 24px; color: #94a3b8; cursor: pointer;">✕</button>
+        </div>
+        
+        <div id="formContent" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <div class="form-group">
+                <label style="font-size: 13px; color: #475569;">Maskapai</label>
+                <select style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px;"><option>GA - Garuda Indonesia</option></select>
+            </div>
+            <div class="form-group">
+                <label style="font-size: 13px; color: #475569;">Kelas Kabin</label>
+                <select style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px;"><option>Economy</option></select>
+            </div>
+            <div class="form-group">
+                <label style="font-size: 13px; color: #475569;">Bandara Asal</label>
+                <select style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px;"><option>CGK - Jakarta</option></select>
+            </div>
+            <div class="form-group">
+                <label style="font-size: 13px; color: #475569;">Bandara Tujuan</label>
+                <select style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px;"><option>DPS - Bali</option></select>
+            </div>
+            <div class="form-group">
+                <label style="font-size: 13px; color: #475569;">Tanggal Penerbangan</label>
+                <input type="date" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px;">
+            </div>
+            <div class="form-group">
+                <label style="font-size: 13px; color: #475569;">Flight Number</label>
+                <input type="text" placeholder="Contoh: GA198" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px;">
+            </div>
+        </div>
 
-<!-- MODAL: DELETE (Batalkan Klaim) -->
-<div id="deleteModal" class="modal">
-   <div class="modal-content delete-modal-content">
-       <h3>Batalkan Klaim?</h3>
-       <p>Klaim akan dihapus secara permanen.</p>
-       <form id="deleteForm" action="#">
-           <div class="modal-footer flex-end">
-               <button type="button" class="btn-outline" onclick="closeModal('deleteModal')">Batal</button>
-               <button type="button" class="btn-primary btn-danger" onclick="alert('Klaim dihapus (Preview)'); closeModal('deleteModal');">Hapus</button>
-           </div>
-       </form>
-   </div>
+        <div id="deleteContent" style="display: none; text-align: center; margin: 20px 0;">
+            <p style="color: #64748b; margin-bottom: 20px;">Klaim akan dihapus secara permanen.</p>
+        </div>
+
+        <div style="margin-top: 24px; display: flex; justify-content: flex-end; gap: 10px;">
+            <button onclick="closeClaimModal()" style="background: transparent; color: #475569; border: 1px solid #cbd5e1; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 500;">Batal</button>
+            <button class="btn-primary" onclick="submitForm()" id="btnSubmitForm">Ajukan</button>
+        </div>
+    </div>
 </div>
-
 
 <script>
-   // Membuka modal
-   function openModal(modalId) {
-       document.getElementById(modalId).style.display = 'flex';
-   }
+    function openClaimModal(mode) {
+        document.getElementById('claimModal').style.display = 'flex';
+        const formDiv = document.getElementById('formContent');
+        const delDiv = document.getElementById('deleteContent');
+        const title = document.getElementById('formModalTitle');
+        const btn = document.getElementById('btnSubmitForm');
 
+        if(mode === 'create' || mode === 'edit') {
+            formDiv.style.display = 'grid';
+            delDiv.style.display = 'none';
+            title.innerText = mode === 'create' ? 'Ajukan Klaim Baru' : 'Edit Klaim';
+            btn.innerText = 'Simpan';
+            btn.style.backgroundColor = '#1e3a8a';
+        } else {
+            formDiv.style.display = 'none';
+            delDiv.style.display = 'block';
+            title.innerText = 'Batalkan Klaim?';
+            btn.innerText = 'Hapus';
+            btn.style.backgroundColor = '#ef4444';
+        }
+    }
+    
+    function closeClaimModal() {
+        document.getElementById('claimModal').style.display = 'none';
+    }
 
-   // Menutup modal
-   function closeModal(modalId) {
-       document.getElementById(modalId).style.display = 'none';
-   }
-
-
-   // Mengisi data ke modal edit
-   function openEditModal(id, maskapai, asal, tujuan, tanggal, flight, tiket, kelas, pnr) {
-       document.getElementById('edit_maskapai').value = maskapai;
-       document.getElementById('edit_bandara_asal').value = asal;
-       document.getElementById('edit_bandara_tujuan').value = tujuan;
-       document.getElementById('edit_tanggal').value = tanggal;
-       document.getElementById('edit_flight').value = flight;
-       document.getElementById('edit_tiket').value = tiket;
-       document.getElementById('edit_kelas_kabin').value = kelas;
-       document.getElementById('edit_pnr').value = pnr;
-       openModal('editModal');
-   }
-
-
-   // Membuka modal delete
-   function openDeleteModal(id) {
-       openModal('deleteModal');
-   }
-
-
-   // Menutup modal jika user klik area gelap di luar modal
-   window.onclick = function(event) {
-       if (event.target.classList.contains('modal')) {
-           event.target.style.display = "none";
-       }
-   }
+    function submitForm() {
+        alert('Simulasi: Aksi berhasil disimpan!');
+        closeClaimModal();
+    }
 </script>
-
-
-</body>
-</html>
+{% endblock %}
