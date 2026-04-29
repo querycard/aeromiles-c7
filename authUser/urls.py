@@ -1,7 +1,7 @@
 from django.urls import path
 from . import views
 
-app_name = 'authUser' # Namespace untuk mempermudah routing
+app_name = 'authUser'
 
 urlpatterns = [
     path('login/', views.login_register_view, name='login'),
