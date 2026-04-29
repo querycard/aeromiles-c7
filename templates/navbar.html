@@ -1,6 +1,10 @@
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
   
+  body {
+      padding-top: 90px; /* Biar konten gak ketutup navbar fixed */
+  }
+  
   .aero-navbar {
     position: fixed;
     top: 0; left: 0; right: 0;
@@ -13,8 +17,10 @@
   .aero-top {
     display: flex;
     align-items: center;
-    height: 58px;
-    padding: 0 30px;
+    min-height: 58px; /* FIX: Diganti dari height jadi min-height agar bisa membesar kalau menu turun baris */
+    padding: 10px 30px;
+    flex-wrap: wrap; /* FIX: Elemen akan turun ke bawah dengan rapi kalau layar sempit */
+    gap: 10px;
   }
   
   .aero-brand {
@@ -25,12 +31,14 @@
     display: flex;
     align-items: center;
     gap: 8px;
+    white-space: nowrap;
   }
   
   .aero-menu {
     display: flex;
     margin-left: 20px;
     gap: 4px;
+    flex-wrap: wrap; /* FIX: Menu akan turun baris dengan rapi */
   }
   
   .aero-link {
@@ -40,6 +48,7 @@
     padding: 6px 12px;
     border-radius: 6px;
     transition: .2s;
+    white-space: nowrap; /* FIX PENTING: Mencegah kata seperti "Kelola Member" pecah jadi 2 baris */
   }
   
   .aero-link:hover {
@@ -52,10 +61,13 @@
     text-align: right;
     color: white;
     font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    white-space: nowrap;
   }
   
   .aero-logout {
-    margin-left: 12px;
     border: 1px solid rgba(255,80,80,.4);
     color: #ff6b6b;
     background: none;
@@ -70,11 +82,6 @@
     padding: 6px 30px;
     color: rgba(255,255,255,.5);
   }
-  
-  /* Tambahan margin atas untuk body supaya konten tidak tertutup fixed navbar */
-  body {
-      padding-top: 90px; 
-  }
   </style>
   
   
@@ -87,7 +94,6 @@
   
       <!-- Menu (kiri) -->
       <div class="aero-menu">
-        <!-- MENGGUNAKAN SESSION RAW SQL -->
         {% if request.session.role %}
           
           <a href="{% url 'authUser:dashboard' %}" class="aero-link">Dashboard</a>
@@ -101,7 +107,10 @@
             <a href="{% url 'biru:info_tier' %}" class="aero-link">Info Tier</a>
   
           {% elif request.session.role == 'Staf' %}
-            <a href="#" class="aero-link">Kelola Member</a>
+            
+            <!-- UPDATE URL KELOLA MEMBER DI SINI -->
+            <a href="{% url 'kuning:kelola_member' %}" class="aero-link">Kelola Member</a>
+            
             <a href="{% url 'hijau:staff_claim_approval' %}" class="aero-link">Kelola Klaim</a>
             <a href="{% url 'merah:kelola_hadiah' %}" class="aero-link">Kelola Hadiah</a>
             <a href="{% url 'merah:kelola_mitra' %}" class="aero-link">Kelola Mitra</a>
@@ -121,10 +130,8 @@
   
       {% else %}
         <div class="aero-user">
-          <!-- Karena kita belum menyimpan nama di session, kita pakai email -->
           {{ request.session.email }} ({{ request.session.role }})
   
-          <!-- Form logout harus diarahkan ke url yang benar -->
           <form action="{% url 'authUser:logout' %}" method="POST" style="display:inline;">
             {% csrf_token %}
             <button type="submit" class="aero-logout">Logout</button>

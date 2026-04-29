@@ -9,6 +9,5 @@ urlpatterns = [
     path('biru/', include('biru.urls')),
     path('merah/ ', include('merah.urls')),
     path('hijau/', include('hijau.urls')),
-
     path('kuning/', include('kuning.urls')), 
 ]
