@@ -127,3 +127,54 @@ def dashboard_view(request):
                 data.update({'id_staf': s_row[0], 'kode_maskapai': s_row[1]})
 
     return render(request, 'dashboard.html', {'data': data})
+
+def profile_view(request):
+    email = request.session.get('email')
+    role = request.session.get('role')
+    
+    if not email:
+        return redirect('authUser:login')
+
+    if request.method == 'POST':
+        salutation = request.POST.get('salutation')
+        first_mid_name = request.POST.get('first_mid_name')
+        last_name = request.POST.get('last_name')
+        country_code = request.POST.get('country_code')
+        mobile_number = request.POST.get('mobile_number')
+        kewarganegaraan = request.POST.get('kewarganegaraan')
+        tanggal_lahir = request.POST.get('tanggal_lahir')
+
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                UPDATE aeromiles.PENGGUNA 
+                SET salutation=%s, first_mid_name=%s, last_name=%s, country_code=%s, 
+                    mobile_number=%s, kewarganegaraan=%s, tanggal_lahir=%s
+                WHERE email=%s
+            """, [salutation, first_mid_name, last_name, country_code, mobile_number, kewarganegaraan, tanggal_lahir, email])
+            
+            if role == 'Staf':
+                kode_maskapai = request.POST.get('kode_maskapai')
+                cursor.execute("UPDATE aeromiles.STAF SET kode_maskapai=%s WHERE email=%s", [kode_maskapai, email])
+
+        messages.success(request, "Profil berhasil diperbarui!")
+        return redirect('authUser:profile')
+
+    user_data = {}
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT * FROM aeromiles.PENGGUNA WHERE email = %s", [email])
+        cols = [col[0] for col in cursor.description]
+        user_data = dict(zip(cols, cursor.fetchone()))
+        user_data['role'] = role
+        
+        if role == 'Member':
+            cursor.execute("SELECT nomor_member, tanggal_bergabung FROM aeromiles.MEMBER WHERE email = %s", [email])
+            m_row = cursor.fetchone()
+            user_data['nomor_member'] = m_row[0]
+            user_data['tanggal_bergabung'] = m_row[1]
+        elif role == 'Staf':
+            cursor.execute("SELECT id_staf, kode_maskapai FROM aeromiles.STAF WHERE email = %s", [email])
+            s_row = cursor.fetchone()
+            user_data['id_staf'] = s_row[0]
+            user_data['kode_maskapai'] = s_row[1]
+
+    return render(request, 'profile.html', {'user': user_data})
