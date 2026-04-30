@@ -36,6 +36,38 @@
                     </div>
                 </div>
             </div>
+
+            <div class="modal fade" id="modalUpdate{{ h.kode }}" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header"><h5 class="modal-title">Edit Hadiah - {{ h.kode }}</h5></div>
+                        <div class="modal-body">
+                            <form>
+                                <div class="mb-2">
+                                    <label>Nama Hadiah</label>
+                                    <input type="text" class="form-control" value="{{ h.nama }}" required>
+                                </div>
+                                <div class="mb-2">
+                                    <label>Miles Dibutuhkan</label>
+                                    <input type="number" class="form-control" value="{{ h.miles }}" required>
+                                </div>
+                                <div class="mb-2">
+                                    <label>Valid Start</label>
+                                    <input type="date" class="form-control" value="{{ h.start }}" required>
+                                </div>
+                                <div class="mb-2">
+                                    <label>Program End</label>
+                                    <input type="date" class="form-control" value="{{ h.end }}" required>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                            <button class="btn btn-warning">Simpan Perubahan</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             {% endfor %}
         </tbody>
     </table>
