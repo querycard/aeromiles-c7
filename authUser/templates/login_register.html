@@ -3,11 +3,46 @@
 
 {% block content %}
 <style>
-    .auth-wrapper { max-width: 500px; margin: 0 auto; }
-    .tabs { display: flex; justify-content: space-between; margin-bottom: 20px; border-bottom: 2px solid #ddd; }
-    .tab-btn { flex: 1; padding: 10px; border: none; background: none; cursor: pointer; font-size: 16px; font-weight: bold; color: #777; }
-    .tab-btn.active { color: #0056b3; border-bottom: 3px solid #0056b3; }
+    .auth-wrapper { 
+        max-width: 500px; 
+        margin: 0 auto; 
+        background: white;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+    
+    .tabs { display: flex; justify-content: space-between; margin-bottom: 25px; border-bottom: 2px solid #e2e8f0; }
+    .tab-btn { 
+        flex: 1; padding: 12px; border: none; background: none; cursor: pointer; 
+        font-size: 15px; font-weight: 600; color: #64748b; font-family: 'Poppins', sans-serif;
+        transition: 0.3s;
+    }
+    .tab-btn:hover { color: #001f4d; }
+    .tab-btn.active { color: #001f4d; border-bottom: 3px solid #001f4d; }
     .hidden { display: none; }
+
+    h2 { color: #001f4d; font-weight: 600; margin-top: 0; }
+
+    .form-group { margin-bottom: 15px; }
+    .form-group label {
+        display: block; font-weight: 600; margin-bottom: 6px; font-size: 13px; color: #333;
+    }
+    .form-group input, .form-group select {
+        width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 6px;
+        box-sizing: border-box; font-family: 'Poppins', sans-serif; font-size: 14px;
+        transition: border-color 0.2s;
+    }
+    .form-group input:focus, .form-group select:focus {
+        outline: none; border-color: #4db8ff;
+    }
+    
+    .btn-primary {
+        background-color: #001f4d; color: white; padding: 12px 20px; border: none;
+        border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 600;
+        font-family: 'Poppins', sans-serif; width: 100%; margin-top: 10px; transition: 0.2s;
+    }
+    .btn-primary:hover { background-color: #001533; }
 </style>
 
 <div class="auth-wrapper">
