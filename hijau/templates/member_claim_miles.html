@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+{% block title %}Klaim Missing Miles{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    <h2 style="margin: 0; color: #0f172a;">Riwayat Klaim Miles Anda</h2>
+    <button class="btn-primary" onclick="openClaimModal('create')" style="display: flex; align-items: center; gap: 8px;">
+        <span style="font-size: 18px;">+</span> Ajukan Klaim
+    </button>
+</div>
+
+<!-- FILTER STATUS -->
+<div style="display: flex; gap: 10px; margin-bottom: 20px;">
+    <button style="padding: 6px 12px; border: 1px solid #1e3a8a; background: #1e3a8a; color: white; border-radius: 6px; cursor: pointer;">Semua</button>
+    <button style="padding: 6px 12px; border: 1px solid #e2e8f0; background: white; color: #64748b; border-radius: 6px; cursor: pointer;">Menunggu</button>
+    <button style="padding: 6px 12px; border: 1px solid #e2e8f0; background: white; color: #64748b; border-radius: 6px; cursor: pointer;">Disetujui</button>
+    <button style="padding: 6px 12px; border: 1px solid #e2e8f0; background: white; color: #64748b; border-radius: 6px; cursor: pointer;">Ditolak</button>
+</div>
+
+<!-- TABEL -->
+<div style="background-color: white; border-radius: 8px; border: 1px solid #e2e8f0; overflow-x: auto;">
+    <table style="width: 100%; border-collapse: collapse; text-align: left;">
+        <thead style="background-color: #f8fafc; color: #64748b;">
+            <tr>
+                <th style="padding: 14px 20px; border-bottom: 1px solid #f1f5f9; font-weight: 600;">No. Klaim</th>
+                <th style="padding: 14px 20px; border-bottom: 1px solid #f1f5f9; font-weight: 600;">Rute</th>
+                <th style="padding: 14px 20px; border-bottom: 1px solid #f1f5f9; font-weight: 600;">Tanggal</th>
+                <th style="padding: 14px 20px; border-bottom: 1px solid #f1f5f9; font-weight: 600;">Status</th>
+                <th style="padding: 14px 20px; border-bottom: 1px solid #f1f5f9; font-weight: 600;">Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="padding: 14px 20px; border-bottom: 1px solid #f1f5f9;">CLM-001</td>
+                <td style="padding: 14px 20px; border-bottom: 1px solid #f1f5f9;">GA (CGK &rarr; DPS)</td>
+                <td style="padding: 14px 20px; border-bottom: 1px solid #f1f5f9;">2026-04-25</td>
+                <td style="padding: 14px 20px; border-bottom: 1px solid #f1f5f9;">
+                    <span style="background-color: #f59e0b; color: white; padding: 4px 10px; border-radius: 20px; font-size: 12px;">Menunggu</span>
+                </td>
+                <td style="padding: 14px 20px; border-bottom: 1px solid #f1f5f9;">
+                    <button style="background: none; border: none; cursor: pointer; color: #3b82f6;" onclick="openClaimModal('edit')">✎</button>
+                    <button style="background: none; border: none; cursor: pointer; color: #ef4444;" onclick="openClaimModal('delete')">🗑</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- MODAL FORM KLAIM -->
+<div id="claimModal" style="display: none; position: fixed; inset: 0; background-color: rgba(15,23,42,0.6); align-items: center; justify-content: center; z-index: 1000;">
+    <div style="background-color: white; width: 600px; padding: 24px; border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.1);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px;">
+            <h3 id="formModalTitle" style="margin: 0; font-size: 18px; color: #0f172a;">Form Klaim</h3>
+            <button onclick="closeClaimModal()" style="background: none; border: none; font-size: 24px; color: #94a3b8; cursor: pointer;">✕</button>
+        </div>
+        
+        <div id="formContent" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <div class="form-group">
+                <label style="font-size: 13px; color: #475569;">Maskapai</label>
+                <select style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px;"><option>GA - Garuda Indonesia</option></select>
+            </div>
+            <div class="form-group">
+                <label style="font-size: 13px; color: #475569;">Kelas Kabin</label>
+                <select style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px;"><option>Economy</option></select>
+            </div>
+            <div class="form-group">
+                <label style="font-size: 13px; color: #475569;">Bandara Asal</label>
+                <select style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px;"><option>CGK - Jakarta</option></select>
+            </div>
+            <div class="form-group">
+                <label style="font-size: 13px; color: #475569;">Bandara Tujuan</label>
+                <select style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px;"><option>DPS - Bali</option></select>
+            </div>
+            <div class="form-group">
+                <label style="font-size: 13px; color: #475569;">Tanggal Penerbangan</label>
+                <input type="date" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px;">
+            </div>
+            <div class="form-group">
+                <label style="font-size: 13px; color: #475569;">Flight Number</label>
+                <input type="text" placeholder="Contoh: GA198" style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px;">
+            </div>
+        </div>
+
+        <div id="deleteContent" style="display: none; text-align: center; margin: 20px 0;">
+            <p style="color: #64748b; margin-bottom: 20px;">Klaim akan dihapus secara permanen.</p>
+        </div>
+
+        <div style="margin-top: 24px; display: flex; justify-content: flex-end; gap: 10px;">
+            <button onclick="closeClaimModal()" style="background: transparent; color: #475569; border: 1px solid #cbd5e1; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 500;">Batal</button>
+            <button class="btn-primary" onclick="submitForm()" id="btnSubmitForm">Ajukan</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openClaimModal(mode) {
+        document.getElementById('claimModal').style.display = 'flex';
+        const formDiv = document.getElementById('formContent');
+        const delDiv = document.getElementById('deleteContent');
+        const title = document.getElementById('formModalTitle');
+        const btn = document.getElementById('btnSubmitForm');
+
+        if(mode === 'create' || mode === 'edit') {
+            formDiv.style.display = 'grid';
+            delDiv.style.display = 'none';
+            title.innerText = mode === 'create' ? 'Ajukan Klaim Baru' : 'Edit Klaim';
+            btn.innerText = 'Simpan';
+            btn.style.backgroundColor = '#1e3a8a';
+        } else {
+            formDiv.style.display = 'none';
+            delDiv.style.display = 'block';
+            title.innerText = 'Batalkan Klaim?';
+            btn.innerText = 'Hapus';
+            btn.style.backgroundColor = '#ef4444';
+        }
+    }
+    
+    function closeClaimModal() {
+        document.getElementById('claimModal').style.display = 'none';
+    }
+
+    function submitForm() {
+        alert('Simulasi: Aksi berhasil disimpan!');
+        closeClaimModal();
+    }
+</script>
+{% endblock %}

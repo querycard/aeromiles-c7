@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+    <h2>Dashboard Utama</h2>
+    
+    <div style="background-color: #f8f9fa; padding: 15px; border-radius: 6px; margin-bottom: 20px;">
+        <h3>Informasi Umum (Semua Role)</h3>
+        <p><strong>Nama Lengkap:</strong> {{ data.nama_lengkap }}</p>
+        <p><strong>Email:</strong> {{ data.email }}</p>
+        <p><strong>Nomor HP:</strong> {{ data.telepon }}</p>
+        <p><strong>Kewarganegaraan:</strong> {{ data.kewarganegaraan }}</p>
+        <p><strong>Tanggal Lahir:</strong> {{ data.tanggal_lahir|date:"d M Y" }}</p>
+    </div>
+
+    {% if data.role == 'Member' %}
+        <div style="background-color: #e2e3e5; padding: 15px; border-radius: 6px;">
+            <h3>Informasi Member Khusus</h3>
+            <p><strong>Nomor Member:</strong> {{ data.nomor_member }}</p>
+            <p><strong>Tier Saat Ini:</strong> {{ data.tier }}</p>
+            <p><strong>Total Miles:</strong> {{ data.total_miles }}</p>
+            <p><strong>Award Miles:</strong> {{ data.award_miles }}</p>
+            <p><strong>Tanggal Bergabung:</strong> {{ data.tanggal_bergabung|date:"d M Y" }}</p>
+            
+            <hr>
+            <h4>Riwayat 5 Transaksi Terbaru (Simulasi Dummy UI)</h4>
+            <ul>
+                <li>[12 Apr 2026] Redeem Hadiah Tiket Konser (-5000 Miles)</li>
+                <li>[10 Apr 2026] Klaim Miles GA-123 Disetujui (+1500 Miles)</li>
+                <li>[05 Apr 2026] Beli Package AMP-002 (+2500 Miles)</li>
+            </ul>
+        </div>
+
+    {% elif data.role == 'Staf' %}
+        <div style="background-color: #d1ecf1; padding: 15px; border-radius: 6px;">
+            <h3>Informasi Staf Khusus</h3>
+            <p><strong>ID Staf:</strong> {{ data.id_staf }}</p>
+            <p><strong>Maskapai Bertugas:</strong> {{ data.kode_maskapai }}</p>
+            
+            <hr>
+            <h4>Ringkasan Pekerjaan (Simulasi Dummy UI)</h4>
+            <p><strong>Klaim Menunggu (Seluruh Staf):</strong> 12 Tiket</p>
+            <p><strong>Klaim yang Anda Setujui:</strong> 45 Tiket</p>
+            <p><strong>Klaim yang Anda Tolak:</strong> 3 Tiket</p>
+        </div>
+    {% endif %}
+{% endblock %}

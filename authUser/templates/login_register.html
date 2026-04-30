@@ -1,0 +1,201 @@
+{% extends 'base.html' %}
+{% block title %}Login & Register{% endblock %}
+
+{% block content %}
+<style>
+    .auth-wrapper { 
+        max-width: 500px; 
+        margin: 0 auto; 
+        background: white;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+    
+    .tabs { display: flex; justify-content: space-between; margin-bottom: 25px; border-bottom: 2px solid #e2e8f0; }
+    .tab-btn { 
+        flex: 1; padding: 12px; border: none; background: none; cursor: pointer; 
+        font-size: 15px; font-weight: 600; color: #64748b; font-family: 'Poppins', sans-serif;
+        transition: 0.3s;
+    }
+    .tab-btn:hover { color: #001f4d; }
+    .tab-btn.active { color: #001f4d; border-bottom: 3px solid #001f4d; }
+    .hidden { display: none; }
+
+    h2 { color: #001f4d; font-weight: 600; margin-top: 0; }
+
+    .form-group { margin-bottom: 15px; }
+    .form-group label {
+        display: block; font-weight: 600; margin-bottom: 6px; font-size: 13px; color: #333;
+    }
+    .form-group input, .form-group select {
+        width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 6px;
+        box-sizing: border-box; font-family: 'Poppins', sans-serif; font-size: 14px;
+        transition: border-color 0.2s;
+    }
+    .form-group input:focus, .form-group select:focus {
+        outline: none; border-color: #4db8ff;
+    }
+    
+    .btn-primary {
+        background-color: #001f4d; color: white; padding: 12px 20px; border: none;
+        border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 600;
+        font-family: 'Poppins', sans-serif; width: 100%; margin-top: 10px; transition: 0.2s;
+    }
+    .btn-primary:hover { background-color: #001533; }
+</style>
+
+<div class="auth-wrapper">
+    <div class="tabs">
+        <button class="tab-btn active" id="tab-login" onclick="switchTab('login')">Login</button>
+        <button class="tab-btn" id="tab-register" onclick="switchTab('register')">Register</button>
+    </div>
+
+    <div id="form-login">
+        <h2 style="text-align: center; color: #333; margin-bottom: 20px;">Masuk ke AeroMiles</h2>
+        <form method="POST" action="">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="login">
+            
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" name="password" required>
+            </div>
+            <button type="submit" class="btn-primary" style="width: 100%;">Log In</button>
+        </form>
+    </div>
+
+    <div id="form-register" class="hidden">
+        <h2 style="text-align: center; color: #333; margin-bottom: 20px;">Daftar Akun Baru</h2>
+        <form method="POST" action="" onsubmit="return validateRegister()">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="register">
+
+            <div class="form-group">
+                <label>Pilih Role</label>
+                <select id="role-select" name="role" onchange="toggleStafFields()">
+                    <option value="Member">Member</option>
+                    <option value="Staf">Staf</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Salutation</label>
+                <select name="salutation" required>
+                    <option value="">Pilih...</option>
+                    <option value="Mr.">Mr.</option>
+                    <option value="Mrs.">Mrs.</option>
+                    <option value="Ms.">Ms.</option>
+                    <option value="Dr.">Dr.</option>
+                </select>
+            </div>
+
+                <div style="display: flex; gap: 10px;">
+                    <div class="form-group" style="flex: 1;">
+                        <label>Nama Depan-Tengah</label>
+                        <input type="text" name="first_mid_name" required>
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label>Nama Belakang</label>
+                        <input type="text" name="last_name" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" name="reg_email" required>
+                </div>
+
+                <div style="display: flex; gap: 10px;">
+                    <div class="form-group" style="flex: 1;">
+                        <label>Country Code</label>
+                        <input type="text" name="country_code" placeholder="+62" required>
+                    </div>
+                    <div class="form-group" style="flex: 2;">
+                        <label>Nomor HP</label>
+                        <input type="text" name="mobile_number" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Tanggal Lahir</label>
+                    <input type="date" name="tanggal_lahir" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Kewarganegaraan</label>
+                    <input type="text" name="kewarganegaraan" required>
+                </div>
+
+            <div class="form-group hidden" id="staf-maskapai-group">
+                <label>Kode Maskapai</label>
+                <select name="kode_maskapai" id="reg-maskapai">
+                    <option value="">Pilih Maskapai...</option>
+                    <option value="GA">Garuda Indonesia (GA)</option>
+                    <option value="AK">AirAsia (AK)</option>
+                    <option value="SJ">Sriwijaya Air (SJ)</option>
+                    <option value="JT">Lion Air (JT)</option>
+                    <option value="ID">Batik Air (ID)</option>
+                </select>
+            </div>
+
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="reg-password" name="password" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Konfirmasi Password</label>
+                    <input type="password" id="reg-confirm-password" required>
+                </div>
+
+            <button type="submit" class="btn-primary" style="width: 100%;">Register</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function switchTab(tab) {
+        if (tab === 'login') {
+            document.getElementById('form-login').classList.remove('hidden');
+            document.getElementById('form-register').classList.add('hidden');
+            document.getElementById('tab-login').classList.add('active');
+            document.getElementById('tab-register').classList.remove('active');
+        } else {
+            document.getElementById('form-login').classList.add('hidden');
+            document.getElementById('form-register').classList.remove('hidden');
+            document.getElementById('tab-login').classList.remove('active');
+            document.getElementById('tab-register').classList.add('active');
+        }
+    }
+
+    function toggleStafFields() {
+        const role = document.getElementById('role-select').value;
+        const maskapaiGroup = document.getElementById('staf-maskapai-group');
+        const maskapaiInput = document.getElementById('reg-maskapai');
+        
+        if (role === 'Staf') {
+            maskapaiGroup.classList.remove('hidden');
+            maskapaiInput.required = true;
+        } else {
+            maskapaiGroup.classList.add('hidden');
+            maskapaiInput.required = false;
+        }
+    }
+
+    function validateRegister(btn) {
+        const pass = document.getElementById('reg-password').value;
+        const confirm = document.getElementById('reg-confirm-password').value;
+        
+        if (pass !== confirm) {
+            alert("Error: Password dan Konfirmasi Password harus sama!");
+            return false;
+        }
+        return true;
+    }
+</script>
+{% endblock %}

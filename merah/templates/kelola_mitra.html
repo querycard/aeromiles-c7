@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<div class="container mt-5">
+    <h2 class="text-danger">Kelola Mitra AeroMiles</h2>
+ 
+    <button class="btn btn-info my-3 text-white" data-bs-toggle="modal" data-bs-target="#modalCreateMitra"> + Daftarkan Mitra Baru </button>
+
+    <table class="table table-striped">
+        <thead class="table-primary">
+            <tr>
+                <th>Email Mitra</th><th>ID Penyedia</th><th>Nama Mitra</th><th>Kerjasama Sejak</th><th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for m in mitra %}
+            <tr>
+                <td>{{ m.email }}</td><td>{{ m.id_penyedia }}</td><td>{{ m.nama }}</td><td>{{ m.sejak }}</td>
+                <td>
+                    <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modalUpdateMitra{{ m.id_penyedia }}">Edit</button>
+                    <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#modalDeleteMitra{{ m.id_penyedia }}">Hapus</button>
+                </td>
+            </tr>
+            <div class="modal fade" id="modalDeleteMitra{{ m.id_penyedia }}" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header text-danger"><h5 class="modal-title">Hapus Mitra?</h5></div>
+                        <div class="modal-body text-dark">Penghapusan mitra akan berpengaruh pada hadiah yang disediakan oleh mitra ini.[cite: 1]</div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                            <button class="btn btn-danger">Ya, Hapus</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="modalUpdateMitra{{ m.id_penyedia }}" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header text-warning"><h5 class="modal-title">Edit Mitra - {{ m.id_penyedia }}</h5></div>
+                        <div class="modal-body text-dark">
+                            <form>
+                                <div class="mb-3">
+                                    <label>Email Mitra</label>
+                                    <input type="email" class="form-control" value="{{ m.email }}" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label>Nama Mitra</label>
+                                    <input type="text" class="form-control" value="{{ m.nama }}" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label>Tanggal Kerja Sama</label>
+                                    <input type="date" class="form-control" value="{{ m.sejak }}" required>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                            <button class="btn btn-warning">Simpan Perubahan</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<div class="modal fade" id="modalCreateMitra" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header"><h5 class="modal-title">Pendaftaran Mitra Baru</h5></div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3"><label>Email Mitra</label><input type="email" class="form-control" placeholder="example@mail.com" required></div>
+                    <div class="mb-3"><label>Nama Mitra</label><input type="text" class="form-control" required></div>
+                    <div class="mb-3"><label>Tanggal Kerja Sama</label><input type="date" class="form-control" required></div>
+                </form>
+            </div>
+            <div class="modal-footer"><button class="btn btn-info text-white">Daftarkan</button></div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+{% endblock %}

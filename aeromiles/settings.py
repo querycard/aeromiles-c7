@@ -43,6 +43,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'main',
+    'authUser',
+    'kuning',
+    'biru',
+    'merah',
+    'hijau',
 ]
 
 MIDDLEWARE = [
@@ -60,7 +66,7 @@ ROOT_URLCONF = 'aeromiles.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -80,8 +86,15 @@ WSGI_APPLICATION = 'aeromiles.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'aeromiles',
+        'USER': 'postgres',
+        'PASSWORD': 'firos2006',
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
+        'OPTIONS': {
+            'options': '-c search_path=aeromiles,public'
+        }
     }
 }
 

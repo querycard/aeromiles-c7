@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% block title %}Kelola Klaim Missing Miles{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    <h2 style="margin: 0; color: #1a202c;">Kelola Klaim Missing Miles</h2>
+</div>
+
+<!-- FILTER -->
+<div style="display: flex; gap: 15px; margin-bottom: 20px; background-color: #f8f9fa; padding: 15px; border-radius: 8px;">
+    <select style="padding: 8px 12px; border: 1px solid #cbd5e0; border-radius: 6px; background-color: white; font-size: 14px;">
+        <option>Semua Status</option>
+        <option>Menunggu</option>
+        <option>Disetujui</option>
+        <option>Ditolak</option>
+    </select>
+    <select style="padding: 8px 12px; border: 1px solid #cbd5e0; border-radius: 6px; background-color: white; font-size: 14px;">
+        <option>Semua Maskapai</option>
+        <option>GA</option>
+        <option>AK</option>
+        <option>JT</option>
+    </select>
+</div>
+
+<!-- TABEL -->
+<div style="background-color: white; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); overflow: hidden; border: 1px solid #edf2f7;">
+    <table style="width: 100%; border-collapse: collapse; text-align: left;">
+        <thead style="background-color: #f8fafc; color: #64748b;">
+            <tr>
+                <th style="padding: 15px 20px; border-bottom: 1px solid #edf2f7; font-weight: 600;">No. Klaim</th>
+                <th style="padding: 15px 20px; border-bottom: 1px solid #edf2f7; font-weight: 600;">Member</th>
+                <th style="padding: 15px 20px; border-bottom: 1px solid #edf2f7; font-weight: 600;">Maskapai</th>
+                <th style="padding: 15px 20px; border-bottom: 1px solid #edf2f7; font-weight: 600;">Rute</th>
+                <th style="padding: 15px 20px; border-bottom: 1px solid #edf2f7; font-weight: 600;">Tanggal</th>
+                <th style="padding: 15px 20px; border-bottom: 1px solid #edf2f7; font-weight: 600;">Status</th>
+                <th style="padding: 15px 20px; border-bottom: 1px solid #edf2f7; font-weight: 600; text-align: center;">Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Simulasi Data -->
+            <tr>
+                <td style="padding: 15px 20px; border-bottom: 1px solid #edf2f7;">CLM-001</td>
+                <td style="padding: 15px 20px; border-bottom: 1px solid #edf2f7;">
+                    <strong style="color: #1a202c; display: block;">John Doe</strong>
+                    <small style="color: #718096;">john@mail.com</small>
+                </td>
+                <td style="padding: 15px 20px; border-bottom: 1px solid #edf2f7;">GA</td>
+                <td style="padding: 15px 20px; border-bottom: 1px solid #edf2f7;">CGK &rarr; DPS</td>
+                <td style="padding: 15px 20px; border-bottom: 1px solid #edf2f7;">2026-04-25</td>
+                <td style="padding: 15px 20px; border-bottom: 1px solid #edf2f7;">
+                    <span style="background-color: #fdf6b2; color: #723b13; padding: 5px 10px; border-radius: 20px; font-size: 12px; font-weight: bold;">Menunggu</span>
+                </td>
+                <td style="padding: 15px 20px; border-bottom: 1px solid #edf2f7; text-align: center;">
+                    <button style="background: none; border: none; cursor: pointer; font-size: 18px;" onclick="openApprovalModal('approve')">✅</button>
+                    <button style="background: none; border: none; cursor: pointer; font-size: 18px;" onclick="openApprovalModal('reject')">❌</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- MODAL AKSI -->
+<div id="approvalModal" style="display: none; position: fixed; inset: 0; background-color: rgba(0,0,0,0.5); align-items: center; justify-content: center; z-index: 1000;">
+    <div style="background-color: white; width: 400px; border-radius: 10px; box-shadow: 0 10px 15px rgba(0,0,0,0.1); padding: 25px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+            <h3 id="modalTitle" style="margin: 0; font-size: 18px;">Konfirmasi Aksi</h3>
+            <button onclick="closeApprovalModal()" style="background: none; border: none; font-size: 20px; cursor: pointer; color: #a0aec0;">✕</button>
+        </div>
+        <p id="modalDesc" style="font-size: 14px; color: #4a5568; margin-bottom: 20px;">Apakah Anda yakin ingin memproses klaim ini?</p>
+        <div style="display: flex; justify-content: flex-end; gap: 10px;">
+            <button onclick="closeApprovalModal()" style="padding: 8px 16px; border-radius: 6px; font-weight: bold; cursor: pointer; background-color: white; border: 1px solid #cbd5e0; color: #4a5568;">Batal</button>
+            <button onclick="submitApproval()" style="padding: 8px 16px; border-radius: 6px; font-weight: bold; cursor: pointer; border: none; background-color: #0056b3; color: white;">Konfirmasi</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openApprovalModal(action) {
+        document.getElementById('approvalModal').style.display = 'flex';
+        if(action === 'approve') {
+            document.getElementById('modalTitle').innerText = 'Setujui Klaim';
+            document.getElementById('modalDesc').innerText = 'Miles akan ditambahkan ke akun member sesuai rute dan kelas kabin.';
+        } else {
+            document.getElementById('modalTitle').innerText = 'Tolak Klaim';
+            document.getElementById('modalDesc').innerText = 'Klaim akan ditolak dan member akan diinformasikan.';
+        }
+    }
+    function closeApprovalModal() {
+        document.getElementById('approvalModal').style.display = 'none';
+    }
+    function submitApproval() {
+        alert("Simulasi: Status klaim berhasil diperbarui!");
+        closeApprovalModal();
+    }
+</script>
+{% endblock %}
