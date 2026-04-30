@@ -99,7 +99,7 @@
           <a href="{% url 'authUser:dashboard' %}" class="aero-link">Dashboard</a>
           
           {% if request.session.role == 'Member' %}
-            <a href="#" class="aero-link">Identitas</a>
+            <a href="{% url 'kuning:identitas' %}" class="aero-link">Identitas</a>
             <a href="{% url 'hijau:claim_miles' %}" class="aero-link">Klaim</a>
             <a href="{% url 'hijau:transfer_miles' %}" class="aero-link">Transfer</a>
             <a href="{% url 'biru:redeem' %}" class="aero-link">Redeem</a>
